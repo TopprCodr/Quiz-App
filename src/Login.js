@@ -7,11 +7,14 @@ import GoogleButton from "./GoogleButton";
 import LoginSignUpBtn from "./LoginSignUpBtn";
 
 export default function Login() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
     const [log, setLog] = useState("");
 
     //function to handle when login btn is clicked on
     function handleLoginBtnClick() {
-        console.log("login clicked");
+        console.log("login clicked", email, password);
     }
 
     //function to handle when google login btn is clicked on
@@ -35,6 +38,8 @@ export default function Login() {
                     style={styles.inputField}
                     keyboardType="email-address"
                     placeholder="Enter your registered email"
+                    value={email}
+                    onChangeText={(val) => setEmail(val)}
                 />
 
                 <View style={styles.divider}></View>
@@ -44,6 +49,8 @@ export default function Login() {
                     style={styles.inputField}
                     secureTextEntry
                     placeholder="Enter password"
+                    value={password}
+                    onChangeText={(val) => setPassword(val)}
                 />
             </View>
 
