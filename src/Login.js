@@ -82,8 +82,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        fontFamily: 'Roboto',
-        fontStyle: 'normal',
         marginTop: 60,
         paddingHorizontal: 30,
     },
