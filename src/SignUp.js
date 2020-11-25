@@ -17,6 +17,7 @@ export default class SignUp extends ValidationComponent {
             ageGroup: "",
             password: "",
             confirmPassword: "",
+            isVisible: true,
         };
     }
 
@@ -29,6 +30,7 @@ export default class SignUp extends ValidationComponent {
             ageGroup: { required: true },
             password: { required: true },
             confirmPassword: { equalPassword: this.state.password, required: true },
+            // isVisible: {},
         });
     }
 
@@ -42,90 +44,105 @@ export default class SignUp extends ValidationComponent {
         console.log("sign in clicked");
     }
 
+    handleSnackBarClose() {
+        console.log("snackbar closed")
+        const isVisble = !this.state.isVisible;
+        this.setState({ isVisble })
+    }
+
     //component rendering
     render() {
         return (
-            <ScrollView style={styles.container}>
-                <Text style={styles.title}>Signup</Text>
+            <>
+                <ScrollView style={styles.container}>
+                    <Text style={styles.title}>Signup</Text>
 
-                <View style={styles.form}>
-                    <Text style={styles.label}>Name</Text>
-                    <TextInput
-                        style={styles.inputField}
-                        placeholder="Enter your name"
-                        value={this.state.name}
-                        onChangeText={(name) => this.setState({ name })}
+                    <View style={styles.form}>
+                        <Text style={styles.label}>Name</Text>
+                        <TextInput
+                            style={styles.inputField}
+                            placeholder="Enter your name"
+                            value={this.state.name}
+                            onChangeText={(name) => this.setState({ name })}
+                        />
+
+                        <View style={styles.divider}></View>
+
+                        <Text style={styles.label}>Email Address</Text>
+                        <TextInput
+                            style={styles.inputField}
+                            keyboardType="email-address"
+                            placeholder="Enter your registered email"
+                            value={this.state.email}
+                            onChangeText={(email) => this.setState({ email })}
+                        />
+
+                        <View style={styles.divider}></View>
+
+                        <Text style={styles.label}>Age Group</Text>
+                        <Picker
+                            style={styles.inputField}
+                            selectedValue={this.state.ageGroup}
+                            onValueChange={(ageGroup, itemIndex) => this.setState({ ageGroup })}
+                        >
+                            <Picker.Item label="" value="" />
+                            <Picker.Item label="1-4" value="1-4" />
+                            <Picker.Item label="5-12" value="5-12" />
+                            <Picker.Item label="13-18" value="13-18" />
+                        </Picker>
+
+                        <View style={styles.divider}></View>
+
+                        <Text style={styles.label}>Password</Text>
+                        <TextInput
+                            style={styles.inputField}
+                            secureTextEntry
+                            placeholder="Enter password"
+                            value={this.state.password}
+                            onChangeText={(password) => this.setState({ password })}
+                        />
+
+                        <View style={styles.divider}></View>
+
+                        <Text style={styles.label}>Confirm Password</Text>
+                        <TextInput
+                            style={styles.inputField}
+                            secureTextEntry
+                            placeholder="Confirm password"
+                            value={this.state.confirmPassword}
+                            onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
+                        />
+                    </View>
+
+                    <BasicButton
+                        text="Register"
+                        onPress={this.handleRegisterBtnClick}
                     />
 
-                    <View style={styles.divider}></View>
+                    <Text style={styles.log}>{this.getErrorMessages()}</Text>
 
-                    <Text style={styles.label}>Email Address</Text>
-                    <TextInput
-                        style={styles.inputField}
-                        keyboardType="email-address"
-                        placeholder="Enter your registered email"
-                        value={this.state.email}
-                        onChangeText={(email) => this.setState({ email })}
+                    <ORDivider />
+
+                    <GoogleButton
+                        text="Sign up with google"
+                        onPress={this.handleGoogleSignUpBtnClick}
                     />
 
-                    <View style={styles.divider}></View>
-
-                    <Text style={styles.label}>Age Group</Text>
-                    <Picker
-                        style={styles.inputField}
-                        selectedValue={this.state.ageGroup}
-                        onValueChange={(ageGroup, itemIndex) => this.setState({ ageGroup })}
-                    >
-                        <Picker.Item label="" value="" />
-                        <Picker.Item label="1-4" value="1-4" />
-                        <Picker.Item label="5-12" value="5-12" />
-                        <Picker.Item label="13-18" value="13-18" />
-                    </Picker>
-
-                    <View style={styles.divider}></View>
-
-                    <Text style={styles.label}>Password</Text>
-                    <TextInput
-                        style={styles.inputField}
-                        secureTextEntry
-                        placeholder="Enter password"
-                        value={this.state.password}
-                        onChangeText={(password) => this.setState({ password })}
+                    <LoginSignUpBtn
+                        customStyle={styles.signin}
+                        text="Already have an account?"
+                        btnText="Sign in"
+                        onPress={this.handleSignInBtnClick}
                     />
-
-                    <View style={styles.divider}></View>
-
-                    <Text style={styles.label}>Confirm Password</Text>
-                    <TextInput
-                        style={styles.inputField}
-                        secureTextEntry
-                        placeholder="Confirm password"
-                        value={this.state.confirmPassword}
-                        onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
-                    />
-                </View>
-
-                <BasicButton
-                    text="Register"
-                    onPress={this.handleRegisterBtnClick}
-                />
-
-                <Text style={styles.log}>{this.getErrorMessages()}</Text>
-
-                <ORDivider />
-
-                <GoogleButton
-                    text="Sign up with google"
-                    onPress={this.handleGoogleSignUpBtnClick}
-                />
-
-                <LoginSignUpBtn
-                    customStyle={styles.signin}
-                    text="Already have an account?"
-                    btnText="Sign in"
-                    onPress={this.handleSignInBtnClick}
-                />
-            </ScrollView>
+                </ScrollView>
+                {/* <Snackbar
+                    visible={this.state.isVisible}
+                    message="dsd World"
+                    // style={styles.snackbar}
+                    timeout={100}
+                    onRequestClose={this.handleSnackBarClose}
+                /> */}
+            </>
         );
     }
 }
@@ -176,5 +193,9 @@ const styles = StyleSheet.create({
 
     signin: {
         marginVertical: 40,
+    },
+
+    snackbar: {
+        backgroundColor: "red",
     }
 });
