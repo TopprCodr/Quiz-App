@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
 import ORDivider from "./ORDivider";
 import BasicButton from "./BasicButton";
 import GoogleButton from "./GoogleButton";
+import LoginSignUpBtn from "./LoginSignUpBtn";
 
 export default function Login() {
     const [log, setLog] = useState("");
 
+    //function to handle when login btn is clicked on
     function handleLoginBtnClick() {
         console.log("login clicked");
     }
 
+    //function to handle when google login btn is clicked on
     function handleGoogleLoginBtnClick() {
         console.log("google login clicked");
+    }
+
+    //function to handle when signup btn is clicked on
+    function handleSignUpBtnClick() {
+        console.log("signup clicked");
     }
 
     //component rendering
@@ -52,6 +60,13 @@ export default function Login() {
                 text="Sign in with google"
                 onPress={handleGoogleLoginBtnClick}
             />
+
+            <LoginSignUpBtn
+                customStyle={styles.signup}
+                text="Don’t have an account?"
+                btnText="Sign up"
+                onPress={handleSignUpBtnClick}
+            />
         </View>
     );
 }
@@ -59,18 +74,17 @@ export default function Login() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 60,
-        paddingHorizontal: 30,
         backgroundColor: '#fff',
         fontFamily: 'Roboto',
         fontStyle: 'normal',
+        marginTop: 60,
+        paddingHorizontal: 30,
     },
 
     title: {
         fontWeight: '500',
         fontSize: 20,
         letterSpacing: 0.1,
-
         color: '#2E2E2E',
     },
 
@@ -100,4 +114,8 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginVertical: 2,
     },
+
+    signup: {
+        marginTop: 40,
+    }
 });
