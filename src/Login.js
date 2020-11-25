@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
 
 import ORDivider from "./ORDivider";
 import BasicButton from "./BasicButton";
@@ -26,7 +26,7 @@ export default function Login() {
 
     //component rendering
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Text style={styles.title}>Login</Text>
 
             <View style={styles.form}>
@@ -67,7 +67,7 @@ export default function Login() {
                 btnText="Sign up"
                 onPress={handleSignUpBtnClick}
             />
-        </View>
+        </ScrollView>
     );
 }
 
