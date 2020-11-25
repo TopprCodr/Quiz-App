@@ -27,6 +27,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "hi",
+    "githubUrl": "https://github.com/adityasuman2025/codr-c50"
   }
 }
