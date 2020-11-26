@@ -7,6 +7,7 @@ import ORDivider from "./ORDivider";
 import BasicButton from "./BasicButton";
 import GoogleButton from "./GoogleButton";
 import LoginSignUpBtn from "./LoginSignUpBtn";
+import SnackBar from "./SnackBar";
 
 export default class SignUp extends ValidationComponent {
     constructor(props) {
@@ -17,7 +18,9 @@ export default class SignUp extends ValidationComponent {
             ageGroup: "",
             password: "",
             confirmPassword: "",
-            isVisible: true,
+            snackBarVisible: false,
+            snackBarType: "",
+            snackBarText: "",
         };
     }
 
@@ -30,24 +33,44 @@ export default class SignUp extends ValidationComponent {
             ageGroup: { required: true },
             password: { required: true },
             confirmPassword: { equalPassword: this.state.password, required: true },
-            // isVisible: {},
         });
+
+        //if some error found in validation
+        //then displaying it in snackbar
+        if (this.getErrorMessages()) {
+            this.displaySnackBar("error", this.getErrorMessages());
+        } else {
+            this.hideSnackBar();
+            this.displaySnackBar("success", "all good");
+        }
     }
 
     //function to handle when google signup btn is clicked on
-    handleGoogleSignUpBtnClick() {
+    handleGoogleSignUpBtnClick = () => {
         console.log("google signup clicked");
     }
 
     //function to handle when sign in btn is clicked on
-    handleSignInBtnClick() {
+    handleSignInBtnClick = () => {
         console.log("sign in clicked");
     }
 
-    handleSnackBarClose() {
-        console.log("snackbar closed")
-        const isVisble = !this.state.isVisible;
-        this.setState({ isVisble })
+    //function to display snackbar
+    displaySnackBar = (type, text) => {
+        this.setState({
+            "snackBarType": type,
+            "snackBarText": text,
+        });
+        this.setState({
+            "snackBarVisible": true
+        });
+    }
+
+    //function to hide snackbar
+    hideSnackBar = () => {
+        this.setState({
+            "snackBarVisible": false
+        });
     }
 
     //component rendering
@@ -119,7 +142,7 @@ export default class SignUp extends ValidationComponent {
                         onPress={this.handleRegisterBtnClick}
                     />
 
-                    <Text style={styles.log}>{this.getErrorMessages()}</Text>
+                    <Text style={styles.log}></Text>
 
                     <ORDivider />
 
@@ -135,13 +158,17 @@ export default class SignUp extends ValidationComponent {
                         onPress={this.handleSignInBtnClick}
                     />
                 </ScrollView>
-                {/* <Snackbar
-                    visible={this.state.isVisible}
-                    message="dsd World"
-                    // style={styles.snackbar}
-                    timeout={100}
-                    onRequestClose={this.handleSnackBarClose}
-                /> */}
+
+                {
+                    this.state.snackBarVisible ?
+                        <SnackBar
+                            isVisible={this.state.snackBarVisible}
+                            text={this.state.snackBarText}
+                            type={this.state.snackBarType}
+                            onClose={this.hideSnackBar}
+                        />
+                        : null
+                }
             </>
         );
     }
