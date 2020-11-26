@@ -18,7 +18,6 @@ export default function Landing() {
     //component rendering
     return (
         <View style={styles.container}>
-
             <LottieView
                 autoPlay
                 loop
