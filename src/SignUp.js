@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import ValidationComponent from 'react-native-form-validator';
+import { Audio } from 'expo-av';
 
 import ORDivider from "./ORDivider";
 import BasicButton from "./BasicButton";
@@ -25,6 +26,20 @@ export default class SignUp extends ValidationComponent {
             snackBarType: "",
             snackBarText: "",
         };
+    }
+
+    playAudio = async () => {
+        try {
+            const soundObject = new Audio.Sound();
+            await soundObject.loadAsync(require('../assets/ding2.mp3'));
+            await soundObject.playAsync();
+
+            // Don't forget to unload the sound from memory
+            // when you are done using the Sound object
+            // await soundObject.unloadAsync();
+        } catch (error) {
+            // An error occurred!
+        }
     }
 
     //function to handle when signup btn is clicked on
@@ -58,6 +73,7 @@ export default class SignUp extends ValidationComponent {
     //function to handle when google signup btn is clicked on
     handleGoogleSignUpBtnClick = () => {
         console.log("google signup clicked");
+        this.playAudio();
     }
 
     //function to handle when sign in btn is clicked on
