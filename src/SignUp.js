@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import ValidationComponent from 'react-native-form-validator';
 
@@ -18,6 +18,9 @@ export default class SignUp extends ValidationComponent {
             ageGroup: "",
             password: "",
             confirmPassword: "",
+
+            isLoading: false,
+
             snackBarVisible: false,
             snackBarType: "",
             snackBarText: "",
@@ -26,6 +29,8 @@ export default class SignUp extends ValidationComponent {
 
     //function to handle when signup btn is clicked on
     handleRegisterBtnClick = () => {
+        this.displayLoader();
+
         //validating fields using 3rd party library
         this.validate({
             name: { minlength: 3, maxlength: 7, required: true },
@@ -43,6 +48,11 @@ export default class SignUp extends ValidationComponent {
             this.hideSnackBar();
             this.displaySnackBar("success", "all good");
         }
+
+        //this is done to displaying loader animation for 1s
+        setTimeout(() => {
+            this.hideLoader();
+        }, 1000);
     }
 
     //function to handle when google signup btn is clicked on
@@ -70,6 +80,21 @@ export default class SignUp extends ValidationComponent {
     hideSnackBar = () => {
         this.setState({
             "snackBarVisible": false
+        });
+    }
+
+    //function to toogle loading bar
+    displayLoader = () => {
+        console.log("diaplyed loader");
+        this.setState({
+            isLoading: true,
+        });
+    }
+
+    hideLoader = () => {
+        console.log("hidden loader");
+        this.setState({
+            isLoading: false,
         });
     }
 
@@ -142,7 +167,11 @@ export default class SignUp extends ValidationComponent {
                         onPress={this.handleRegisterBtnClick}
                     />
 
-                    <Text style={styles.log}></Text>
+                    {
+                        this.state.isLoading ?
+                            <ActivityIndicator style={styles.loader} />
+                            : null
+                    }
 
                     <ORDivider />
 
@@ -212,10 +241,8 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
     },
 
-    log: {
-        textAlign: "center",
-        marginVertical: 2,
-        color: "red",
+    loader: {
+        marginTop: 10,
     },
 
     signin: {
