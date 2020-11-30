@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { PieChart } from 'react-native-chart-kit'
 
 import BasicButton from "./BasicButton";
 
@@ -12,6 +13,12 @@ export default function Profile() {
     const [email, setEmail] = useState("Pankaj.tripathi@gmail.com");
     const [phoneNo, setPhoneNo] = useState("9876543210");
     const [aboutYou, setAboutYou] = useState("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy ");
+
+    const [performanceData, setPerformanceData] = useState({
+        "total": 18,
+        "correct": 10,
+        "incorrect": 8,
+    });
 
     //function to handle when login btn is clicked on
     function handleSaveBtnClick() {
@@ -83,12 +90,55 @@ export default function Profile() {
                     value={aboutYou}
                     onChangeText={(val) => setAboutYou(val)}
                 />
+                <View style={styles.divider}></View>
             </View>
 
+            <Text style={styles.label}>Performance</Text>
+            <Text style={styles.totalData}>Total attempted: {performanceData.total}</Text>
+            <View style={styles.chartContainer}>
+                <PieChart
+                    data={[
+                        {
+                            name: 'Correct',
+                            population: performanceData.correct,
+                            color: '#34A853',
+                            legendFontColor: '#34A853',
+                            legendFontSize: 14,
+                        },
+                        {
+                            name: 'Incorrect',
+                            population: performanceData.incorrect,
+                            color: '#EB4335',
+                            legendFontColor: '#EB4335',
+                            legendFontSize: 14,
+                        }
+                    ]}
+                    width={Dimensions.get("screen").width}
+                    height={220}
+                    chartConfig={{
+                        backgroundColor: '#e26a00',
+                        backgroundGradientFrom: '#fb8c00',
+                        backgroundGradientTo: '#ffa726',
+                        decimalPlaces: 2, // optional, defaults to 2dp
+                        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                        style: {
+                            borderRadius: 16
+                        }
+                    }}
+
+                    accessor="population"
+                    backgroundColor="transparent"
+                    paddingLeft="20"
+                    absolute
+                />
+            </View>
+
+            <View style={styles.divider}></View>
             <BasicButton
                 text="Save"
                 onPress={handleSaveBtnClick}
             />
+            <View style={styles.divider}></View>
         </ScrollView>
     );
 }
@@ -109,7 +159,7 @@ const styles = StyleSheet.create({
     },
 
     form: {
-        marginVertical: 35,
+        marginTop: 35,
     },
 
     imageContainer: {
@@ -154,4 +204,16 @@ const styles = StyleSheet.create({
     divider: {
         paddingVertical: 8,
     },
+
+    chartContainer: {
+        alignItems: "center",
+    },
+
+    totalData: {
+        fontWeight: '500',
+        fontSize: 15,
+        lineHeight: 20,
+        color: '#757575',
+        marginVertical: 10,
+    }
 });
