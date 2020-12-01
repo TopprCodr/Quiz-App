@@ -7,9 +7,10 @@ import Media from "./src/Media";
 import Profile from "./src/Profile";
 import MyQuizes from "./src/MyQuizes";
 import CreateQuiz from "./src/CreateQuiz";
+import QuizDetails from "./src/QuizDetails";
 
 export default function App() {
   return (
-    <MyQuizes />
+    <QuizDetails />
   );
 }
