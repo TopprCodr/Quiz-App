@@ -9,8 +9,8 @@ export default function Profile() {
     const [image, setImage] = useState("http://2.bp.blogspot.com/-QWj2Wq45014/TzNOfQezNqI/AAAAAAAAAIY/Lvy0m7ZtWRM/s1600/12.jpg");
     const [hasImageChanged, setHasImageChanged] = useState(false);
 
-    const [name, setName] = useState("Pankaj Tripathi");
-    const [email, setEmail] = useState("Pankaj.tripathi@gmail.com");
+    const [name, setName] = useState("Iron Man");
+    const [email, setEmail] = useState("tony.stark@iron.man");
     const [phoneNo, setPhoneNo] = useState("9876543210");
     const [aboutYou, setAboutYou] = useState("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy ");
 
