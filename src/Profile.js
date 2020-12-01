@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, Dimensions, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { PieChart } from 'react-native-chart-kit'
 
@@ -19,6 +19,19 @@ export default function Profile() {
         "correct": 10,
         "incorrect": 8,
     });
+
+    //component did mount
+    useEffect(() => {
+        //asking for permission to access phone's gallery
+        (async () => {
+            if (Platform.OS !== 'web') {
+                const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+                if (status !== 'granted') {
+                    alert('Sorry, we need camera roll permissions to make this work!');
+                }
+            }
+        })();
+    }, []);
 
     //function to handle when login btn is clicked on
     function handleSaveBtnClick() {
