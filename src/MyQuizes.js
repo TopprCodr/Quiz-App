@@ -1,10 +1,26 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 
 import QuizItem from "./QuizItem";
 
 export default function MyQuizes() {
-    const [quiz, setQuiz] = useState(["Algebra Quiz", "Science Quiz"]);
+    const [quiz, setQuiz] = useState([{
+        "quiz_name": "Algebra Quiz",
+        "quiz_img_uri": "https://squeakychimp.com/wp-content/uploads/2016/11/math-algebra-legging-texture.jpg",
+    },
+    {
+        "quiz_name": "McLaren Quiz",
+        "quiz_img_uri": "",
+    },
+    {
+        "quiz_name": "Cricket Quiz",
+        "quiz_img_uri": "https://wp-seo-mainpage.s3-accelerate.amazonaws.com/uploads/cricket-players.jpg",
+    },
+    {
+        "quiz_name": "Advance Algorithm Quiz",
+        "quiz_img_uri": "https://www.geeksforgeeks.org/wp-content/uploads/Competitive-Programming-1.jpg",
+    },
+    ]); //will be fetched from db
 
     //function to handle when any quiz item is clicked on
     function handleQuizItemClick(index) {
@@ -14,6 +30,7 @@ export default function MyQuizes() {
     //fuction to hanlde when add new quiz btn is pressed on
     function handleAddNewQuizBtnClick() {
         console.log("add new quuiz btn pressed");
+        //redirecting to CreateQuiz.js
     }
 
     //component rendering
@@ -28,7 +45,8 @@ export default function MyQuizes() {
                         <QuizItem
                             key={idx}
                             index={idx}
-                            text={item}
+                            name={item.quiz_name}
+                            imageUrl={item.quiz_img_uri}
                             onPress={handleQuizItemClick}
                         />
                     )

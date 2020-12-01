@@ -10,6 +10,6 @@ import CreateQuiz from "./src/CreateQuiz";
 
 export default function App() {
   return (
-    <CreateQuiz />
+    <MyQuizes />
   );
 }
