@@ -6,9 +6,10 @@ import Landing from "./src/Landing";
 import Media from "./src/Media";
 import Profile from "./src/Profile";
 import MyQuizes from "./src/MyQuizes";
+import CreateQuiz from "./src/CreateQuiz";
 
 export default function App() {
   return (
-    <Profile />
+    <CreateQuiz />
   );
 }

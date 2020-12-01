@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, } from 'react-native';
 
-import QuizItem from "./QuizItem";
-
-export default function MyQuizes() {
+export default function CreateQuiz() {
     const [quiz, setQuiz] = useState(["Algebra Quiz", "Science Quiz"]);
 
     //function to handle when any quiz item is clicked on
@@ -19,25 +17,9 @@ export default function MyQuizes() {
     //component rendering
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>My Quizzes</Text>
+            <Text style={styles.title}>Create Quiz</Text>
             <View style={styles.divider}></View>
 
-            {
-                quiz.map((item, idx) => {
-                    return (
-                        <QuizItem
-                            key={idx}
-                            index={idx}
-                            text={item}
-                            onPress={handleQuizItemClick}
-                        />
-                    )
-                })
-            }
-
-            <TouchableOpacity style={styles.addNewBtn} onPress={handleAddNewQuizBtnClick}>
-                <Text style={styles.addNewBtnText}>+ Add new quiz</Text>
-            </TouchableOpacity>
         </ScrollView >
     );
 }

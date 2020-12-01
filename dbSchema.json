@@ -20,6 +20,7 @@
             "quiz_name": "tell me about urself?",
             "quiz_img_uri": "http://admnabjhsgjdkhsfkl;sadsjfhj.jpg",
             "quiz_type": "Maths quiz",
+            "quiz_desc": "this is a mast quiz",
             "questions": [
                 {
                     "question_id": "jihugyftughiugyu",
