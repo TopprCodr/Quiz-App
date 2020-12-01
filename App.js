@@ -8,9 +8,10 @@ import Profile from "./src/Profile";
 import MyQuizes from "./src/MyQuizes";
 import CreateQuiz from "./src/CreateQuiz";
 import QuizDetails from "./src/QuizDetails";
+import AddQuizQstn from "./src/AddQuizQstn";
 
 export default function App() {
   return (
-    <QuizDetails />
+    <AddQuizQstn />
   );
 }

@@ -43,11 +43,6 @@ export default function CreateQuiz() {
         console.log("create btn clicked");
     }
 
-    //fuction to hanlde when add new quiz btn is pressed on
-    function handleAddNewQuizBtnClick() {
-        console.log("add new quuiz btn pressed");
-    }
-
     //component rendering
     return (
         <ScrollView style={styles.container}>
