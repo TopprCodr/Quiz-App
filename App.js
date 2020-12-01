@@ -5,6 +5,7 @@ import SignUp from "./src/SignUp";
 import Landing from "./src/Landing";
 import Media from "./src/Media";
 import Profile from "./src/Profile";
+import MyQuizes from "./src/MyQuizes";
 
 export default function App() {
   return (
