@@ -1,4 +1,6 @@
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import Login from "./src/Login";
 import SignUp from "./src/SignUp";
@@ -10,8 +12,12 @@ import CreateQuiz from "./src/CreateQuiz";
 import QuizDetails from "./src/QuizDetails";
 import AddQuizQstn from "./src/AddQuizQstn";
 
+import MyStack from './src/StackNav';
+
 export default function App() {
   return (
-    <AddQuizQstn />
+    <NavigationContainer>
+      <MyStack />
+    </NavigationContainer>
   );
 }

@@ -4,26 +4,23 @@ import LottieView from 'lottie-react-native';
 
 import BasicButton from "./BasicButton";
 
-export default function Landing() {
+export default function Landing({navigation}) {
     //function to handle when login btn is clicked on
     function handleLoginBtnClick() {
         console.log("login clicked");
+        navigation.navigate('Login');
     }
 
     //function to handle when signup btn is clicked on
     function handleSignUpBtnClick() {
         console.log("signup clicked");
+        navigation.navigate('Signup');
     }
 
     //component rendering
     return (
         <View style={styles.container}>
-            <LottieView
-                autoPlay
-                loop
-                style={styles.animation}
-                source={require('../assets/quiz-animation.json')}
-            />
+            
 
             <Text style={styles.title}>Quizmania</Text>
             <View style={styles.divider}></View>
@@ -44,7 +41,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        marginTop: 60,
+        marginTop: 0,
         paddingHorizontal: 30,
         justifyContent: "center",
     },
