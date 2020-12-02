@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, ScrollView, ActivityIndicator } from
 import { Picker } from '@react-native-picker/picker';
 import ValidationComponent from 'react-native-form-validator';
 import { Audio } from 'expo-av';
+import firebase from "firebase";
 
 import ORDivider from "./ORDivider";
 import BasicButton from "./BasicButton";
@@ -58,25 +59,24 @@ export default class SignUp extends ValidationComponent {
         //if some error found in validation
         //then displaying it in snackbar
         if (this.getErrorMessages()) {
+            this.hideLoader();
             this.displaySnackBar("error", this.getErrorMessages());
         } else {
-            this.hideSnackBar();
-            this.displaySnackBar("success", "all good");
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
                 .then((user) => {
-                    console.log('User registered');
+                    this.hideLoader();
+                    this.hideSnackBar();
+                    this.displaySnackBar("success", "Successfully registered");
                 })
                 .catch((error) => {
                     var errorCode = error.code;
                     var errorMessage = error.message;
-                    // ..
+
+                    this.hideLoader();
+                    this.hideSnackBar();
+                    this.displaySnackBar("error", errorMessage);
                 });
         }
-
-        //this is done to displaying loader animation for 1s
-        setTimeout(() => {
-            this.hideLoader();
-        }, 1000);
     }
 
     //function to handle when google signup btn is clicked on
