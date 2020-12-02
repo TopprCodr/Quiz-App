@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, ActivityIndicator } from 'react-native';
-import firebase from 'firebase';
+import firebase from './FirebaseConfig';
 
 import { Picker } from '@react-native-picker/picker';
 import ValidationComponent from 'react-native-form-validator';

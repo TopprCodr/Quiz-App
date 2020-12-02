@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
-import firebase from 'firebase';
+import firebase from './FirebaseConfig';
 
 import ORDivider from "./ORDivider";
 import BasicButton from "./BasicButton";
