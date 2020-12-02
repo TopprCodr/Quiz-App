@@ -16,15 +16,12 @@ import UserHome from "./src/UserHome";
 import GiveQuiz from "./src/GiveQuiz";
 
 
-/*<NavigationContainer>
-      <StartStack />
-      <QuizStack/>
-    </NavigationContainer>*/
 export default function App() {
   return (
-    // <NavigationContainer>
-    //   <MyStack />
-    // </NavigationContainer>
-    <GiveQuiz />
+    <NavigationContainer>
+      <StartStack />
+      {/* <QuizStack /> */}
+    </NavigationContainer>
+    // <GiveQuiz />
   );
 }
