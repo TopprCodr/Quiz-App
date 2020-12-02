@@ -12,6 +12,8 @@ import QuizDetails from "./src/QuizDetails";
 import AddQuizQstn from "./src/AddQuizQstn";
 import StartStack from './src/StartStack';
 import QuizStack from './src/QuizStack';
+import UserHome from "./src/UserHome";
+import GiveQuiz from "./src/GiveQuiz";
 
 
 /*<NavigationContainer>
@@ -20,10 +22,9 @@ import QuizStack from './src/QuizStack';
     </NavigationContainer>*/
 export default function App() {
   return (
-
-    <NavigationContainer>
-      <StartStack />
-    </NavigationContainer>
-
+    // <NavigationContainer>
+    //   <MyStack />
+    // </NavigationContainer>
+    <GiveQuiz />
   );
 }
