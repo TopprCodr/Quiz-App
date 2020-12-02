@@ -11,6 +11,7 @@ export default function Media() {
     const [image, setImage] = useState(null);
     const [uploadUrl, setUploadUrl] = useState("");
     const [isUploading, setIsUploading] = useState(false);
+    const [percentUploaded, setPercentUploaded] = useState("");
 
     const [quizName, setQuizName] = useState("");
     const [quizType, setQuizType] = useState("");
@@ -55,10 +56,13 @@ export default function Media() {
             .on(
                 firebase.storage.TaskEvent.STATE_CHANGED,
                 snapshot => {
-                    console.log("image upload progress: ", (snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    const percent = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    console.log("percent", percent);
+                    setPercentUploaded(Math.floor(percent) + " %");
                 },
                 error => {
                     console.log("image upload error: ", (error).toString());
+                    setPercentUploaded("");
                 },
                 () => {
                     storageRef.getDownloadURL()
@@ -136,6 +140,7 @@ export default function Media() {
                 isUploading ?
                     <>
                         <ActivityIndicator />
+                        <Text style={styles.percent}>{percentUploaded}</Text>
                         <View style={styles.divider}></View>
                     </>
                     : null
@@ -196,5 +201,9 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         width: "100%",
         height: 200,
+    },
+
+    percent: {
+        textAlign: "center",
     }
 });
