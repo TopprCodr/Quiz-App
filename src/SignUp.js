@@ -62,17 +62,20 @@ export default class SignUp extends ValidationComponent {
         if (this.getErrorMessages()) {
             this.displaySnackBar("error", this.getErrorMessages());
         } else {
-            this.hideSnackBar();
-            this.displaySnackBar("success", "all good");
-            firebase.auth().createUserWithEmailAndPassword(this.state.email,                                                          this.state.password)
-                           .then((user) => {
-                              console.log('User registered');
-                            })
-                            .catch((error) => {
-                              var errorCode = error.code;
-                              var errorMessage = error.message;
-                              // ..
-                            });
+            firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+                .then((user) => {
+                    console.log('User registered');
+
+                    this.hideSnackBar();
+                    this.displaySnackBar("success", "all good");
+                })
+                .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+
+                    this.hideSnackBar();
+                    this.displaySnackBar("error", errorMessage);
+                });
         }
 
         //this is done to displaying loader animation for 1s
