@@ -1,10 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import LottieView from 'lottie-react-native';
 
 import BasicButton from "./BasicButton";
 
-export default function Landing({navigation}) {
+export default function Landing({ navigation }) {
     //function to handle when login btn is clicked on
     function handleLoginBtnClick() {
         console.log("login clicked");
@@ -20,8 +19,6 @@ export default function Landing({navigation}) {
     //component rendering
     return (
         <View style={styles.container}>
-            
-
             <Text style={styles.title}>Quizmania</Text>
             <View style={styles.divider}></View>
             <BasicButton
