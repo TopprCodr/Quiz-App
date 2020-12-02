@@ -125,6 +125,7 @@ export default function GiveQuiz() {
         //prev btn
         if (activeQstnIdx > 0) {
             html.push(<BasicButton
+                key={0}
                 text="Prev"
                 customStyle={styles.button}
                 onPress={hanldePrevBtnClick}
@@ -134,6 +135,7 @@ export default function GiveQuiz() {
         //next btn
         if (activeQstnIdx < totalQstnsCount - 1) {
             html.push(<BasicButton
+                key={1}
                 text="Next"
                 customStyle={styles.button}
                 onPress={hanldeNextBtnClick}
