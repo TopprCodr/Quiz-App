@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, ActivityIndicator } from 'react-native';
+import firebase from 'firebase';
+
 import { Picker } from '@react-native-picker/picker';
 import ValidationComponent from 'react-native-form-validator';
 import { Audio } from 'expo-av';
@@ -62,6 +64,15 @@ export default class SignUp extends ValidationComponent {
         } else {
             this.hideSnackBar();
             this.displaySnackBar("success", "all good");
+            firebase.auth().createUserWithEmailAndPassword(this.state.email,                                                          this.state.password)
+                           .then((user) => {
+                              console.log('User registered');
+                            })
+                            .catch((error) => {
+                              var errorCode = error.code;
+                              var errorMessage = error.message;
+                              // ..
+                            });
         }
 
         //this is done to displaying loader animation for 1s
@@ -79,6 +90,7 @@ export default class SignUp extends ValidationComponent {
     //function to handle when sign in btn is clicked on
     handleSignInBtnClick = () => {
         console.log("sign in clicked");
+        this.props.navigation.navigate('Login');
     }
 
     //function to display snackbar
@@ -119,7 +131,6 @@ export default class SignUp extends ValidationComponent {
         return (
             <>
                 <ScrollView style={styles.container}>
-                    <Text style={styles.title}>Signup</Text>
 
                     <View style={styles.form}>
                         <Text style={styles.label}>Name</Text>
@@ -189,17 +200,11 @@ export default class SignUp extends ValidationComponent {
                             : null
                     }
 
-                    <ORDivider />
-
-                    <GoogleButton
-                        text="Sign up with google"
-                        onPress={this.handleGoogleSignUpBtnClick}
-                    />
 
                     <LoginSignUpBtn
                         customStyle={styles.signin}
                         text="Already have an account?"
-                        btnText="Sign in"
+                        btnText="Log in"
                         onPress={this.handleSignInBtnClick}
                     />
                 </ScrollView>
@@ -223,7 +228,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        marginTop: 60,
+        marginTop: 0,
         paddingHorizontal: 30,
     },
 

@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
+import firebase from 'firebase';
 
 import ORDivider from "./ORDivider";
 import BasicButton from "./BasicButton";
 import GoogleButton from "./GoogleButton";
 import LoginSignUpBtn from "./LoginSignUpBtn";
 
-export default function Login() {
+export default function Login({navigation}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
     const [log, setLog] = useState("");
 
     //function to handle when login btn is clicked on
     function handleLoginBtnClick() {
         console.log("login clicked", email, password);
+        firebase.auth().signInWithEmailAndPassword(email, password)
+                       .then((user) => {
+                         console.log(user);
+                        })
+                        .catch((error) => {
+                          var errorCode = error.code;
+                          var errorMessage = error.message;
+                        });
     }
 
     //function to handle when google login btn is clicked on
@@ -25,12 +33,12 @@ export default function Login() {
     //function to handle when signup btn is clicked on
     function handleSignUpBtnClick() {
         console.log("signup clicked");
+        navigation.navigate('Signup');
     }
 
     //component rendering
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Login</Text>
 
             <View style={styles.form}>
                 <Text style={styles.label}>Email Address</Text>
@@ -61,12 +69,6 @@ export default function Login() {
 
             <Text style={styles.log}>{log}</Text>
 
-            <ORDivider />
-
-            <GoogleButton
-                text="Sign in with google"
-                onPress={handleGoogleLoginBtnClick}
-            />
 
             <LoginSignUpBtn
                 customStyle={styles.signup}
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        marginTop: 60,
+        marginTop: 0,
         paddingHorizontal: 30,
     },
 
