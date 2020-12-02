@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
         marginTop: 2,
         marginRight: 2,
         borderRadius: 50,
-        // backgroundColor: "red",
     },
 
     closeIconText: {
