@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
 
 import BasicButton from "./BasicButton";
 
-export default function AddQuizQstn({navigation}) {
+export default function AddQuizQstn({ navigation }) {
     const [qstn, setQstn] = useState("");
     const [correctOption, setCorrectOption] = useState("");
     const [option1, setOption1] = useState("");

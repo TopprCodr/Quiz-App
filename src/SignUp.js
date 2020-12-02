@@ -50,7 +50,7 @@ export default class SignUp extends ValidationComponent {
 
         //validating fields using 3rd party library
         this.validate({
-            name: { minlength: 3, maxlength: 7, required: true },
+            name: { minlength: 3, required: true },
             email: { email: true, required: true },
             ageGroup: { required: true },
             password: { required: true },
@@ -60,28 +60,24 @@ export default class SignUp extends ValidationComponent {
         //if some error found in validation
         //then displaying it in snackbar
         if (this.getErrorMessages()) {
+            this.hideLoader();
             this.displaySnackBar("error", this.getErrorMessages());
         } else {
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
                 .then((user) => {
-                    console.log('User registered');
-
+                    this.hideLoader();
                     this.hideSnackBar();
-                    this.displaySnackBar("success", "all good");
+                    this.displaySnackBar("success", "Successfully Registered");
                 })
                 .catch((error) => {
                     var errorCode = error.code;
                     var errorMessage = error.message;
 
+                    this.hideLoader();
                     this.hideSnackBar();
                     this.displaySnackBar("error", errorMessage);
                 });
         }
-
-        //this is done to displaying loader animation for 1s
-        setTimeout(() => {
-            this.hideLoader();
-        }, 1000);
     }
 
     //function to handle when google signup btn is clicked on

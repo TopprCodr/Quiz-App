@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-nati
 
 import QuizItem from "./QuizItem";
 
-export default function MyQuizes({navigation}) {
+export default function MyQuizes({ navigation }) {
     const [quiz, setQuiz] = useState([{
         "quiz_name": "Algebra Quiz",
         "quiz_img_uri": "https://squeakychimp.com/wp-content/uploads/2016/11/math-algebra-legging-texture.jpg",

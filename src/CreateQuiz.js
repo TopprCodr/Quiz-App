@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 import BasicButton from "./BasicButton";
 
-export default function CreateQuiz({navigation}) {
+export default function CreateQuiz({ navigation }) {
     const [availableQuizTypes, setAvailableQuizTypes] = useState(["Maths Quiz", "Science Quiz", "History Quiz", "Social Science", "Hindi Quiz", "English Quiz", "Sports Quiz", "Tech Quiz", "Arts Quiz", "General Quiz"]); //will be fetched from db
 
     const [image, setImage] = useState(null);

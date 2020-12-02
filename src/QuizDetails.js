@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 
 import BasicButton from "./BasicButton";
 
-export default function QuizDetails({navigation}) {
+export default function QuizDetails({ navigation }) {
     const [quizDetails, setQuizDetails] = useState({
         "quiz_name": "Advance Algorithm Quiz",
         "quiz_img_uri": "https://www.geeksforgeeks.org/wp-content/uploads/Competitive-Programming-1.jpg",

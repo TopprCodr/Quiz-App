@@ -20,9 +20,9 @@ import QuizStack from './src/QuizStack';
     </NavigationContainer>*/
 export default function App() {
   return (
-    
+
     <NavigationContainer>
-      <StartStack/>
+      <StartStack />
     </NavigationContainer>
 
   );
