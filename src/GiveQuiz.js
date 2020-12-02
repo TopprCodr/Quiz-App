@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 
+import BasicButton from "./BasicButton";
+
 export default function GiveQuiz() {
     const [quizDetails, setQuizDetails] = useState({
         "quiz_name": "Cars Quiz",
@@ -49,8 +51,8 @@ export default function GiveQuiz() {
         ]
     }); //will be fetched from db
 
-    const [activeQstnIdx, setActiveQstnIdx] = useState(0);
-    const [selectedOptionIdx, setSelectedOptionIdx] = useState(0);
+    const [activeQstnIdx, setActiveQstnIdx] = useState(1);
+    const [selectedOptionIdx, setSelectedOptionIdx] = useState(null);
 
     //function to handle when any option is clicked clicked on
     function handleOptionPressed(idx) {
@@ -105,9 +107,53 @@ export default function GiveQuiz() {
                                 })
                             }
                         </View>
+
+                        <View style={[styles.container, styles.btnsContainer]}>
+                            {renderDirectionButtons()}
+                        </View>
                     </View>
                 </View>
             )
+        }
+    }
+
+    //function to render direction buttons
+    function renderDirectionButtons() {
+        const totalQstnsCount = quizDetails.questions.length || 0;
+        let html = [];
+
+        //prev btn
+        if (activeQstnIdx > 0) {
+            html.push(<BasicButton
+                text="Prev"
+                customStyle={styles.button}
+                onPress={hanldePrevBtnClick}
+            />)
+        }
+
+        //next btn
+        if (activeQstnIdx < totalQstnsCount - 1) {
+            html.push(<BasicButton
+                text="Next"
+                customStyle={styles.button}
+                onPress={hanldeNextBtnClick}
+            />)
+        }
+
+        return html;
+    }
+
+    //function to handle next/prev btn click
+    function hanldePrevBtnClick() {
+        if (activeQstnIdx > 0) {
+            setActiveQstnIdx(activeQstnIdx - 1);
+        }
+    }
+
+    function hanldeNextBtnClick() {
+        const totalQstnsCount = quizDetails.questions.length || 0;
+        if (activeQstnIdx < totalQstnsCount - 1) {
+            setActiveQstnIdx(activeQstnIdx + 1);
         }
     }
 
@@ -121,10 +167,7 @@ export default function GiveQuiz() {
 
             <Image source={{ uri: quizDetails.quiz_img_uri }} style={styles.image} />
 
-            {
-                renderQuestion()
-            }
-
+            {renderQuestion()}
         </ScrollView >
     );
 }
@@ -234,5 +277,16 @@ const styles = StyleSheet.create({
     optionImg: {
         width: 16,
         height: 16,
+    },
+
+    btnsContainer: {
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginVertical: 20,
+    },
+
+    button: {
+        width: "43%",
     }
 });
