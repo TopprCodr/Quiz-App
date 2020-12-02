@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
-
-import QuizItem from "./QuizItem";
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 
 export default function GiveQuiz() {
     const [quizDetails, setQuizDetails] = useState({
@@ -16,23 +14,23 @@ export default function GiveQuiz() {
                 "options": [
                     {
                         "option_id": "7t6rfuyghkg765tfuyig",
-                        "title": "chopra",
-                        "is_ans": 0
+                        "title": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's stand",
+                        "is_ans": false,
                     },
                     {
                         "option_id": "7t6rfuyghkg765tfuyig",
                         "title": "singh",
-                        "is_ans": 1,
+                        "is_ans": true,
                     },
                     {
                         "option_id": "7t6rfuyghkg765tfuyig",
                         "title": "suman",
-                        "is_ans": 1,
+                        "is_ans": false,
                     },
                     {
                         "option_id": "7t6rfuyghkg765tfuyig",
                         "title": "deep",
-                        "is_ans": 1,
+                        "is_ans": false,
                     }
                 ]
             },
@@ -50,11 +48,15 @@ export default function GiveQuiz() {
             },
         ]
     }); //will be fetched from db
-    const [activeQstnIdx, setActiveQstnIdx] = useState(0);
 
-    //function to handle when any quiz item is clicked on
-    function handleQuizItemClick(index) {
-        console.log(index);
+    const [activeQstnIdx, setActiveQstnIdx] = useState(0);
+    const [selectedOptionIdx, setSelectedOptionIdx] = useState(0);
+
+    //function to handle when any option is clicked clicked on
+    function handleOptionPressed(idx) {
+        if (idx != null) {
+            setSelectedOptionIdx(idx);
+        }
     }
 
     //function to rdner question
@@ -78,10 +80,27 @@ export default function GiveQuiz() {
                         <View style={styles.optionsContainer}>
                             {
                                 options.map((item, idx) => {
+                                    let optionImgSrc = require("../assets/option.png");
+                                    let optionBorder = null;
+
+                                    const isAns = item.is_ans;
+                                    if (selectedOptionIdx == idx && isAns) {
+                                        optionImgSrc = require("../assets/rightOption.png");
+                                        optionBorder = styles.rightAnsBorder;
+                                    } else if (selectedOptionIdx == idx && !isAns) {
+                                        optionImgSrc = require("../assets/wrongOption.png");
+                                        optionBorder = styles.wrongAnsBorder;
+                                    }
+
                                     return (
-                                        <View style={[styles.option,]}>
+                                        <TouchableOpacity
+                                            key={idx}
+                                            style={[styles.option, optionBorder]}
+                                            onPress={() => handleOptionPressed(idx)}
+                                        >
                                             <Text style={styles.optionText}>{item.title}</Text>
-                                        </View>
+                                            <Image style={styles.optionImg} source={optionImgSrc} />
+                                        </TouchableOpacity>
                                     )
                                 })
                             }
@@ -192,6 +211,9 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         borderWidth: 1,
         borderColor: "#C6C6C6",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
     },
 
     optionText: {
@@ -208,4 +230,9 @@ const styles = StyleSheet.create({
     wrongAnsBorder: {
         borderColor: "#EB4335",
     },
+
+    optionImg: {
+        width: 16,
+        height: 16,
+    }
 });
