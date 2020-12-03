@@ -10,13 +10,12 @@ import MyQuizes from "./src/MyQuizes";
 import CreateQuiz from "./src/CreateQuiz";
 import QuizDetails from "./src/QuizDetails";
 import AddQuizQstn from "./src/AddQuizQstn";
-import StartStack from './src/StartStack';
-import QuizStack from './src/QuizStack';
 import UserHome from "./src/UserHome";
 import GiveQuiz from "./src/GiveQuiz";
-
 import Social from "./src/Social";
 
+import StartStack from './src/StartStack';
+import QuizStack from './src/QuizStack';
 
 export default function App() {
   return (
