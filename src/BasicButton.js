@@ -3,12 +3,13 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 export default function BasicButton({
     customStyle,
+    textStyle,
     text,
     onPress,
 }) {
     return (
         <TouchableOpacity style={[styles.container, customStyle]} onPress={onPress}>
-            <Text style={styles.text}>{text}</Text>
+            <Text style={[styles.text, textStyle]}>{text}</Text>
         </TouchableOpacity>
     );
 }

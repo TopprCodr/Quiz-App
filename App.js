@@ -15,13 +15,15 @@ import QuizStack from './src/QuizStack';
 import UserHome from "./src/UserHome";
 import GiveQuiz from "./src/GiveQuiz";
 
+import Social from "./src/Social";
+
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <StartStack />
-      {/* <QuizStack /> */}
-    </NavigationContainer>
-    // <GiveQuiz />
+    // <NavigationContainer>
+    //   <StartStack />
+    //   <QuizStack />
+    // </NavigationContainer>
+    <Social />
   );
 }
