@@ -11,19 +11,19 @@ import CreateQuiz from "./src/CreateQuiz";
 import QuizDetails from "./src/QuizDetails";
 import AddQuizQstn from "./src/AddQuizQstn";
 import StartStack from './src/StartStack';
-import QuizStack from './src/QuizStack';
 
 
 /*<NavigationContainer>
       <StartStack />
       <QuizStack/>
+      <DrawerNav/>
     </NavigationContainer>*/
 export default function App() {
   return (
 
+    
     <NavigationContainer>
       <StartStack />
     </NavigationContainer>
-
   );
 }

@@ -3,7 +3,19 @@ import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image,
 import * as ImagePicker from 'expo-image-picker';
 import { PieChart } from 'react-native-chart-kit'
 
+import { DefaultTheme,Provider as PaperProvider,Appbar } from 'react-native-paper';
+
 import BasicButton from "./BasicButton";
+
+const theme = {
+    ...DefaultTheme,
+    roundness: 2,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: 'rgba(113, 205, 220, 0.3)',
+      accent: '#3498db',
+    },
+  };
 
 export default function Profile() {
     const [image, setImage] = useState("http://2.bp.blogspot.com/-QWj2Wq45014/TzNOfQezNqI/AAAAAAAAAIY/Lvy0m7ZtWRM/s1600/12.jpg");
@@ -54,6 +66,8 @@ export default function Profile() {
 
     //component rendering
     return (
+        <PaperProvider theme={theme}>
+            
         <ScrollView style={styles.container}>
             <Text style={styles.title}>Profile</Text>
 
@@ -153,6 +167,7 @@ export default function Profile() {
             />
             <View style={styles.divider}></View>
         </ScrollView>
+        </PaperProvider>
     );
 }
 
@@ -160,7 +175,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        marginTop: 60,
+        paddingTop: 10,
         paddingHorizontal: 30,
     },
 

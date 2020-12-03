@@ -18,10 +18,12 @@ export default function Login({navigation}) {
         firebase.auth().signInWithEmailAndPassword(email, password)
                        .then((user) => {
                          console.log(user);
+                         navigation.navigate('Home');
                         })
                         .catch((error) => {
                           var errorCode = error.code;
                           var errorMessage = error.message;
+                          console.log(errorMessage);
                         });
     }
 
