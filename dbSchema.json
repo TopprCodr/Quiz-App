@@ -1,40 +1,44 @@
 {
-    "Users": [
+    "users": [
         {
-            "user_id": "y7tgyvgi7f7dtyufioiygifytuhio8",
+            "userId": "y7tgyvgi7f7dtyufioiygifytuhio8",
             "name": "adityu",
             "ageGroup": "1-5",
             "desc": "i am a aboy",
             "email": "adity@mn.in",
             "password": "^&TRE%$W^URTYFHGDRTU^%E&$%*&^IYUY",
-            "profile_pic_uri": "http://gogoe.omc/adjhajkda.jpg",
-            "quiz_ids": ["3242rewtgdfb", "43rewtgfdh"],
-            "given_quiz_ids": ["3242rewtgdfb"]
+            "profilePicUri": "http://gogoe.omc/adjhajkda.jpg",
+            "createdQuizIds": ["3242rewtgdfb", "43rewtgfdh"],
+            "givenQuizIds": ["3242rewtgdfb"]
         }
     ],
 
-    "Quizes": [
+    "quizTypes": [
+        "Maths Quiz", "Science Quiz", "History Quiz", "Social Science", "Hindi Quiz", "English Quiz", "Sports Quiz", "Tech Quiz", "Arts Quiz", "General Quiz"
+    ],
+
+    "quizes": [
         {
-            "quiz_id": "3242rewtgdfb",
-            "user_id": "y7tgyvgi7f7dtyufioiygifytuhio8",
-            "quiz_name": "tell me about urself?",
-            "quiz_img_uri": "http://admnabjhsgjdkhsfkl;sadsjfhj.jpg",
-            "quiz_type": "Maths quiz",
-            "quiz_desc": "this is a mast quiz",
+            "quizId": "3242rewtgdfb",
+            "createdByUserId": "y7tgyvgi7f7dtyufioiygifytuhio8",
+            "quizName": "tell me about urself?",
+            "quizImgUri": "http://admnabjhsgjdkhsfkl;sadsjfhj.jpg",
+            "quizType": "Maths Quiz",
+            "quizDesc": "this is a mast quiz",
             "questions": [
                 {
-                    "question_id": "jihugyftughiugyu",
-                    "title": "what is ur name?",
+                    "questionId": "jihugyftughiugyu",
+                    "question": "what is ur name?",
                     "options": [
                         {
-                            "option_id": "7t6rfuyghkg765tfuyig",
-                            "title": "khan",
-                            "is_ans": 0
+                            "optionId": "7t6rfuyghkg765tfuyig",
+                            "option": "khan",
+                            "isAns": false
                         },
                         {
-                            "option_id": "7t6rfuyghkg765tfuyig",
-                            "title": "singh",
-                            "is_ans": 1
+                            "optionId": "7t6rfuyghkg765tfuyig",
+                            "option": "singh",
+                            "isAns": true
                         }
                     ]
                 }
@@ -42,15 +46,15 @@
         }
     ],
 
-    "Responses": [
+    "responses": [
         {
-            "user_id": "y7tgyvgi7f7dtyufioiygifytuhio8",
-            "quiz_id": "3242rewtgdfb",
+            "userId": "y7tgyvgi7f7dtyufioiygifytuhio8",
+            "quizId": "3242rewtgdfb",
             "responses": [
                 {
-                    "question_id": "jihugyftughiugyu",
-                    "answered_option_id": "7t6rfuyghkg765tfuyig",
-                    "is_correct": 0
+                    "questionId": "jihugyftughiugyu",
+                    "answeredOptionId": "7t6rfuyghkg765tfuyig",
+                    "isCorrect": false
                 }
             ]
         }
