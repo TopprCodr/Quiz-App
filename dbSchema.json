@@ -7,7 +7,9 @@
             "desc": "i am a aboy",
             "email": "adity@mn.in",
             "password": "^&TRE%$W^URTYFHGDRTU^%E&$%*&^IYUY",
-            "profilePicUri": "http://gogoe.omc/adjhajkda.jpg",
+            "profilePicUri": {
+                "uri":  "http://gogoe.omc/adjhajkda.jpg"
+            },
             "createdQuizIds": ["3242rewtgdfb", "43rewtgfdh"],
             "givenQuizIds": ["3242rewtgdfb"],
             "quizResponses": [

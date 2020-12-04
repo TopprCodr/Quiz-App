@@ -12,18 +12,17 @@ import SnackBar from "../components/SnackBar";
 
 export default function Profile() {
     const [profilePicUri, setProfilePicUri] = useState(require("../../assets/profile.png"));
-    const [hasImageChanged, setHasImageChanged] = useState(false);
-
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [ageGroup, setAgeGroup] = useState("");
-    const [aboutYou, setAboutYou] = useState("");
-
+    const [desc, setDesc] = useState("");
     const [performanceData, setPerformanceData] = useState({
         "total": 0,
         "correct": 0,
         "incorrect": 0,
     });
+
+    const [hasImageUploaded, setHasImageUploaded] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
     const [snackBarVisible, setSnackBarVisible] = useState(false);
@@ -76,14 +75,13 @@ export default function Profile() {
                                     correct++;
                                 }
                             }
-                            console.log("total", total);
                         }
                         incorrect = total - correct;
 
                         //updating state
                         setName(response.name);
                         setEmail(response.email);
-                        setAboutYou(response.desc);
+                        setDesc(response.desc);
                         setAgeGroup(response.ageGroup);
                         setPerformanceData({
                             total,
@@ -92,14 +90,14 @@ export default function Profile() {
                         });
 
                         if (response.profilePicUri) {
-                            setProfilePicUri({ uri: response.profilePicUri })
+                            setProfilePicUri(response.profilePicUri)
                         }
 
                         setIsLoading(false);
                     }
                 })
                 .catch(error => {
-                    displaySnackBar("error", "Something went wrong");
+                    displaySnackBar("error", "Failed to fetch profile");
                 });
         } else {
             displaySnackBar("error", "User is not logged in");
@@ -119,21 +117,101 @@ export default function Profile() {
     }
 
     //function to handle when login btn is clicked on
-    function handleSaveBtnClick() {
-        console.log("save btn clicked");
+    async function handleSaveBtnClick() {
+        setIsLoading(true);
+
+        try {
+            const loggedUserId = await AsyncStorage.getItem('loggedUserId');
+            if (loggedUserId) {
+                //if new profile pic has been choosen
+                //then uploading it to firebase storage
+                if (hasImageUploaded) {
+                    await uploadImageInFirebase(loggedUserId)
+                        .then(() => {
+                            displaySnackBar("success", "Image Successfully Uploaded");
+                        })
+                        .catch((error) => {
+                            setIsLoading(false);
+                            displaySnackBar("error", "Failed to upload Image");
+                        });
+
+                    setHasImageUploaded(false);
+                } else {
+                    updateProfileInFirebase(loggedUserId, profilePicUri);
+                }
+            }
+        } catch {
+            setIsLoading(false);
+            displaySnackBar("error", "Something went wrong");
+        }
+    }
+
+    //function to upload the image in firebase
+    async function uploadImageInFirebase(loggedUserId) {
+        const imageName = loggedUserId + ".jpg";
+
+        const response = await fetch(profilePicUri.uri);
+        const blob = await response.blob();
+
+        //putting image in firebase
+        const storageRef = firebase.app().storage().ref().child("profile_image/" + imageName);
+        const resp = storageRef.put(blob);
+        resp
+            .on(
+                firebase.storage.TaskEvent.STATE_CHANGED,
+                snapshot => {
+                    const percent = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    console.log("percent", percent);
+                },
+                error => {
+                    console.log("image upload error: ", (error).toString());
+                },
+                () => {
+                    storageRef.getDownloadURL()
+                        .then((downloadUrl) => {
+                            setProfilePicUri({ uri: downloadUrl });
+
+                            //updating the uploaded image url in firebase db
+                            updateProfileInFirebase(loggedUserId, { uri: downloadUrl });
+                        })
+                }
+            )
+
+        return resp;
+    }
+
+    //function to update user profile data in firebase db
+    function updateProfileInFirebase(loggedUserId, imageUploadUrl) {
+        const usersDbRef = firebase.app().database().ref('users/');
+        usersDbRef
+            .child(loggedUserId)
+            .update({
+                name,
+                ageGroup,
+                profilePicUri: imageUploadUrl,
+                desc,
+            },
+                (error) => {
+                    if (error) {
+                        setIsLoading(false);
+                        displaySnackBar("error", "Failed to update profile");
+                    } else {
+                        setIsLoading(false);
+                        displaySnackBar("success", "Profile updated");
+                    }
+                });
     }
 
     //function to handle when profile pic edit btn is clicked on
     async function handleProfilePicEditBtnClick() {
-        console.log("edit profile pic btn clicked");
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             quality: 1,
         });
 
         if (!result.cancelled) {
-            setHasImageChanged(true);
-            setProfilePicUri(result.uri);
+            setProfilePicUri({ uri: result.uri });
+            setHasImageUploaded(true);
         }
     }
 
@@ -170,6 +248,7 @@ export default function Profile() {
                                 style={styles.inputField}
                                 keyboardType="email-address"
                                 placeholder="Enter your registered email"
+                                editable={false}
                                 value={email}
                                 onChangeText={(val) => setEmail(val)}
                             />
@@ -193,8 +272,8 @@ export default function Profile() {
                                 style={styles.inputField}
                                 multiline
                                 placeholder="describe yourself"
-                                value={aboutYou}
-                                onChangeText={(val) => setAboutYou(val)}
+                                value={desc}
+                                onChangeText={(val) => setDesc(val)}
                             />
                             <View style={styles.divider}></View>
                         </View>
