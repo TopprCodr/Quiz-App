@@ -7,7 +7,7 @@ import BasicButton from "./BasicButton";
 import GoogleButton from "./GoogleButton";
 import LoginSignUpBtn from "./LoginSignUpBtn";
 
-export default function Login({navigation}) {
+export default function Login({ navigation }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [log, setLog] = useState("");
@@ -16,15 +16,15 @@ export default function Login({navigation}) {
     function handleLoginBtnClick() {
         console.log("login clicked", email, password);
         firebase.auth().signInWithEmailAndPassword(email, password)
-                       .then((user) => {
-                         console.log(user);
-                         navigation.navigate('Home');
-                        })
-                        .catch((error) => {
-                          var errorCode = error.code;
-                          var errorMessage = error.message;
-                          console.log(errorMessage);
-                        });
+            .then((user) => {
+                console.log(user);
+                navigation.navigate('Home');
+            })
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(errorMessage);
+            });
     }
 
     //function to handle when google login btn is clicked on
