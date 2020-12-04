@@ -10,7 +10,7 @@
             "profilePicUri": "http://gogoe.omc/adjhajkda.jpg",
             "createdQuizIds": ["3242rewtgdfb", "43rewtgfdh"],
             "givenQuizIds": ["3242rewtgdfb"],
-            "responses": [
+            "quizResponses": [
                 {
                     "quizId": "3242rewtgdfb",
                     "responses": [

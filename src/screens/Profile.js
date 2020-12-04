@@ -20,9 +20,9 @@ export default function Profile() {
     const [aboutYou, setAboutYou] = useState("");
 
     const [performanceData, setPerformanceData] = useState({
-        "total": 18,
-        "correct": 10,
-        "incorrect": 8,
+        "total": 0,
+        "correct": 0,
+        "incorrect": 0,
     });
 
     const [isLoading, setIsLoading] = useState(true);
@@ -49,7 +49,6 @@ export default function Profile() {
     //function to functions users data from firebase
     async function fetchUsersData() {
         const loggedUserId = await AsyncStorage.getItem('loggedUserId');
-        console.log("loggedUserId", loggedUserId);
         if (loggedUserId) {
             const usersDbRef = firebase.app().database().ref('users/');
             usersDbRef
@@ -58,11 +57,39 @@ export default function Profile() {
                 .then(resp => {
                     const response = resp.val();
                     if (response) {
+                        //for getting performance pie chart
+                        let total = 0;
+                        let correct = 0;
+                        let incorrect = 0;
+
+                        const quizResponses = response.quizResponses;
+                        for (const idx in quizResponses) {
+                            const quizResponse = quizResponses[idx];
+                            const responses = quizResponse.responses || [];
+
+                            const tempTotal = responses.length || 0;
+                            total += tempTotal;
+                            for (const responsesIdx in responses) {
+                                const ansResponse = responses[responsesIdx];
+                                const isCorrect = ansResponse["isCorrect"];
+                                if (isCorrect) {
+                                    correct++;
+                                }
+                            }
+                            console.log("total", total);
+                        }
+                        incorrect = total - correct;
+
                         //updating state
                         setName(response.name);
                         setEmail(response.email);
                         setAboutYou(response.desc);
                         setAgeGroup(response.ageGroup);
+                        setPerformanceData({
+                            total,
+                            correct,
+                            incorrect,
+                        });
 
                         if (response.profilePicUri) {
                             setProfilePicUri({ uri: response.profilePicUri })
@@ -70,13 +97,12 @@ export default function Profile() {
 
                         setIsLoading(false);
                     }
-                    console.log('response', response);
                 })
                 .catch(error => {
-                    this.displaySnackBar("error", "Something went wrong");
+                    displaySnackBar("error", "Something went wrong");
                 });
         } else {
-            displaySnackBar("error", "User not logged in");
+            displaySnackBar("error", "User is not logged in");
         }
     }
 

@@ -7,17 +7,19 @@ import BasicButton from "../components/BasicButton";
 export default function Landing({ navigation }) {
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(async () => {
-        //checking if any user is already logged or not
-        const loggedUserId = await AsyncStorage.getItem('loggedUserId');
-        console.log("loggedUserId", loggedUserId);
+    useEffect(() => {
+        (async () => {
+            //checking if any user is already logged or not
+            const loggedUserId = await AsyncStorage.getItem('loggedUserId');
+            console.log("loggedUserId", loggedUserId);
 
-        if (loggedUserId) {
-            //if user is already logged then redirecting to Home Screen
-            navigation.navigate('Dashboard');
-        } else {
-            setIsLoading(false);
-        }
+            if (loggedUserId) {
+                //if user is already logged then redirecting to Home Screen
+                navigation.navigate('Dashboard');
+            } else {
+                setIsLoading(false);
+            }
+        })();
     }, []);
 
     //function to handle when login btn is clicked on
