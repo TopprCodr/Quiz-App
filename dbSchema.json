@@ -9,7 +9,19 @@
             "password": "^&TRE%$W^URTYFHGDRTU^%E&$%*&^IYUY",
             "profilePicUri": "http://gogoe.omc/adjhajkda.jpg",
             "createdQuizIds": ["3242rewtgdfb", "43rewtgfdh"],
-            "givenQuizIds": ["3242rewtgdfb"]
+            "givenQuizIds": ["3242rewtgdfb"],
+            "responses": [
+                {
+                    "quizId": "3242rewtgdfb",
+                    "responses": [
+                        {
+                            "questionId": "jihugyftughiugyu",
+                            "answeredOptionId": "7t6rfuyghkg765tfuyig",
+                            "isCorrect": false
+                        }
+                    ]
+                }
+            ]
         }
     ],
 
@@ -44,19 +56,5 @@
                 }
             ]
         }
-    ],
-
-    "responses": [
-        {
-            "userId": "y7tgyvgi7f7dtyufioiygifytuhio8",
-            "quizId": "3242rewtgdfb",
-            "responses": [
-                {
-                    "questionId": "jihugyftughiugyu",
-                    "answeredOptionId": "7t6rfuyghkg765tfuyig",
-                    "isCorrect": false
-                }
-            ]
-        }
-    ]
+    ]   
 }

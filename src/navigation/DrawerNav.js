@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { DrawerActions } from '@react-navigation/native';
 import { DefaultTheme, Provider as PaperProvider, Appbar } from 'react-native-paper';
-
 import {
     createDrawerNavigator,
     DrawerContentScrollView,
-    DrawerItemList,
     DrawerItem,
 } from '@react-navigation/drawer';
 

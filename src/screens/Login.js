@@ -49,7 +49,6 @@ export default function Login({ navigation }) {
 
     //function to handle when signup btn is clicked on
     function handleSignUpBtnClick() {
-        console.log("signup clicked");
         navigation.navigate('Signup');
     }
 
