@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, ActivityIndicator } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, TextInput, ScrollView, ActivityIndicator, } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import firebase from './FirebaseConfig';
 
 import { Picker } from '@react-native-picker/picker';
 import ValidationComponent from 'react-native-form-validator';
-import { Audio } from 'expo-av';
 
-import ORDivider from "./ORDivider";
 import BasicButton from "./BasicButton";
-import GoogleButton from "./GoogleButton";
 import LoginSignUpBtn from "./LoginSignUpBtn";
 import SnackBar from "./SnackBar";
 
@@ -30,20 +29,6 @@ export default class SignUp extends ValidationComponent {
         };
     }
 
-    playAudio = async () => {
-        try {
-            const soundObject = new Audio.Sound();
-            await soundObject.loadAsync(require('../assets/ding2.mp3'));
-            await soundObject.playAsync();
-
-            // Don't forget to unload the sound from memory
-            // when you are done using the Sound object
-            // await soundObject.unloadAsync();
-        } catch (error) {
-            // An error occurred!
-        }
-    }
-
     //function to handle when signup btn is clicked on
     handleRegisterBtnClick = () => {
         this.displayLoader();
@@ -63,32 +48,65 @@ export default class SignUp extends ValidationComponent {
             this.hideLoader();
             this.displaySnackBar("error", this.getErrorMessages());
         } else {
+            //doing firebase auth
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
                 .then((user) => {
-                    this.hideLoader();
-                    this.hideSnackBar();
-                    this.displaySnackBar("success", "Successfully Registered");
+                    try {
+                        //inserting user data in firebase db
+                        const userId = user.user.uid;
+                        const name = this.state.name;
+                        const email = this.state.email
+                        const ageGroup = this.state.ageGroup;
+
+                        const usersDbRef = firebase.app().database().ref('users/');
+                        usersDbRef
+                            .child(userId)
+                            .set({
+                                userId,
+                                name,
+                                email,
+                                ageGroup,
+                                profilePicUri: "",
+                                desc: "",
+                                createdQuizIds: [""],
+                                givenQuizIds: [""],
+                            },
+                                async (error) => {
+                                    if (error) {
+                                        this.hideLoader();
+                                        this.displaySnackBar("error", "Something went wrong");
+                                    } else {
+                                        try {
+                                            //making cookie of the logged user
+                                            await AsyncStorage.setItem("loggedUserEmail", email);
+                                            await AsyncStorage.setItem("loggedUserId", userId);
+
+                                            this.hideLoader();
+                                            this.displaySnackBar("success", "Successfully Registered");
+                                            this.props.navigation.navigate('Home');
+                                        } catch {
+                                            this.hideLoader();
+                                            this.displaySnackBar("error", "Something went wrong");
+                                        }
+                                    }
+                                });
+                    } catch {
+                        this.hideLoader();
+                        this.displaySnackBar("error", "Something went wrong");
+                    }
                 })
                 .catch((error) => {
                     var errorCode = error.code;
                     var errorMessage = error.message;
 
                     this.hideLoader();
-                    this.hideSnackBar();
                     this.displaySnackBar("error", errorMessage);
                 });
         }
     }
 
-    //function to handle when google signup btn is clicked on
-    handleGoogleSignUpBtnClick = () => {
-        console.log("google signup clicked");
-        this.playAudio();
-    }
-
     //function to handle when sign in btn is clicked on
     handleSignInBtnClick = () => {
-        console.log("sign in clicked");
         this.props.navigation.navigate('Login');
     }
 
@@ -112,14 +130,12 @@ export default class SignUp extends ValidationComponent {
 
     //function to toogle loading bar
     displayLoader = () => {
-        console.log("diaplyed loader");
         this.setState({
             isLoading: true,
         });
     }
 
     hideLoader = () => {
-        console.log("hidden loader");
         this.setState({
             isLoading: false,
         });
@@ -198,7 +214,6 @@ export default class SignUp extends ValidationComponent {
                             <ActivityIndicator style={styles.loader} />
                             : null
                     }
-
 
                     <LoginSignUpBtn
                         customStyle={styles.signin}

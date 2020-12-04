@@ -1,0 +1,44 @@
+{
+    "additionalUserInfo": {
+      "isNewUser": true,
+      "providerId": "password"
+    },
+    "credential": null,
+    "operationType": "signIn",
+    "user": {
+      "apiKey": "AIzaSyBiZUU-Gux0EK67ty6tgu2tvT_V1bKyfV4",
+      "appName": "[DEFAULT]",
+      "authDomain": "quizapp-1fafd.firebaseapp.com",
+      "createdAt": "1607066257701",
+      "displayName": null,
+      "email": "adityasuman2025@gmail.com",
+      "emailVerified": false,
+      "isAnonymous": false,
+      "lastLoginAt": "1607066257701",
+      "multiFactor":  {
+        "enrolledFactors":  []
+      },
+      "phoneNumber": null,
+      "photoURL": null,
+      "providerData":  [
+         {
+          "displayName": null,
+          "email": "adityasuman2025@gmail.com",
+          "phoneNumber": null,
+          "photoURL": null,
+          "providerId": "password",
+          "uid": "adityasuman2025@gmail.com",
+        }
+      ],
+      "redirectEventId": null,
+      "stsTokenManager":  {
+        "accessToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImI5ODI2ZDA5Mzc3N2NlMDA1ZTQzYTMyN2ZmMjAyNjUyMTQ1ZTk2MDQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcXVpemFwcC0xZmFmZCIsImF1ZCI6InF1aXphcHAtMWZhZmQiLCJhdXRoX3RpbWUiOjE2MDcwNjYyNTcsInVzZXJfaWQiOiJjUDZzMzlKQnVEY3J3M3JobkRsS0M2WFRiTmIyIiwic3ViIjoiY1A2czM5SkJ1RGNydzNyaG5EbEtDNlhUYk5iMiIsImlhdCI6MTYwNzA2NjI1NywiZXhwIjoxNjA3MDY5ODU3LCJlbWFpbCI6ImFkaXR5YXN1bWFuMjAyNUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiYWRpdHlhc3VtYW4yMDI1QGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.pjZnIY1St_HznHRso0mwEqCnwjGmsoL0-ReXev0RGZqhasaomQHcjE3Lc3hYlXGAHuh-mn8QQJTMqedGsUbQG3MknlXTgEMb-ahtbkXHFN_BUgRGyOLNY3x7L4AVCqSI8Xik6aCvfyt6uUe9eZqVuimx7wn89GpbmVO0uPmVs3PFgOxrvJNvYIC83N9uRZBIMaetyFuH7PLr9ae070we-_cFQp_FZENcKGQ2dBeqgOy1ENQDhL_LniqXlMOYt7KMWIJNCkVxkyaAmYpHyalNKwzy_lHc7XWD9-_6IWbpK8b7Zp2_oql6mzFAHOU1zn7RvN6JKfFY31h5Ffv8mnddXA",
+        "apiKey": "AIzaSyBiZUU-Gux0EK67ty6tgu2tvT_V1bKyfV4",
+        "expirationTime": 1607069857000,
+        "refreshToken": "AG8BCnffoy7Bot_0vbtSTRl_FwSSm5FKfJ4nPbDn2kBZibNs5-zUNag-6xaMZJicvA5N0EGGMMM6R5do2JTQpIKnCKfy3wW6AT4F97X8Esx9ikNxujV2bzU_4Tj94MmOkq5IR9Z3HSHT-0V6XLTbr6HNWr-c9ibx8upkni9YRk_-Z2-8AtCk5qyWeTacoZowKjXi4ghjLf6ltUr47pOfqx72eR-snYlpcA"
+      },
+      "tenantId": null,
+      "uid": "cP6s39JBuDcrw3rhnDlKC6XTbNb2"
+    }
+  }
+  

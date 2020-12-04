@@ -1,14 +1,15 @@
 import firebase from 'firebase';
 
 var firebaseConfig = {
-    apiKey: "AIzaSyD7UndaByz-zO0oh8NOwiX_S_FVGgutBFw",
-    authDomain: "ac50-9cccf.firebaseapp.com",
-    databaseURL: "https://ac50-9cccf.firebaseio.com",
-    projectId: "ac50-9cccf",
-    storageBucket: "ac50-9cccf.appspot.com",
-    messagingSenderId: "687406334185",
-    appId: "1:687406334185:web:5b145ea9361a76b5b23078"
+    apiKey: "AIzaSyBiZUU-Gux0EK67ty6tgu2tvT_V1bKyfV4",
+    authDomain: "quizapp-1fafd.firebaseapp.com",
+    databaseURL: "https://quizapp-1fafd-default-rtdb.firebaseio.com",
+    projectId: "quizapp-1fafd",
+    storageBucket: "quizapp-1fafd.appspot.com",
+    messagingSenderId: "389446420177",
+    appId: "1:389446420177:web:eaf36c2f4d874ca5f6a7f0"
 };
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 export default firebase;

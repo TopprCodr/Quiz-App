@@ -2,27 +2,26 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
 import firebase from './FirebaseConfig';
 
-import ORDivider from "./ORDivider";
 import BasicButton from "./BasicButton";
-import GoogleButton from "./GoogleButton";
 import LoginSignUpBtn from "./LoginSignUpBtn";
 
-export default function Login({navigation}) {
+export default function Login({ navigation }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [log, setLog] = useState("");
 
     //function to handle when login btn is clicked on
     function handleLoginBtnClick() {
         console.log("login clicked", email, password);
         firebase.auth().signInWithEmailAndPassword(email, password)
-                       .then((user) => {
-                         console.log(user);
-                        })
-                        .catch((error) => {
-                          var errorCode = error.code;
-                          var errorMessage = error.message;
-                        });
+            .then((user) => {
+                console.log(user);
+                navigation.navigate('Home');
+            })
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(errorMessage);
+            });
     }
 
     //function to handle when google login btn is clicked on
@@ -66,9 +65,6 @@ export default function Login({navigation}) {
                 text="Login"
                 onPress={handleLoginBtnClick}
             />
-
-            <Text style={styles.log}>{log}</Text>
-
 
             <LoginSignUpBtn
                 customStyle={styles.signup}
