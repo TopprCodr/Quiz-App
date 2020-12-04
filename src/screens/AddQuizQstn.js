@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
 
-import BasicButton from "./BasicButton";
+import BasicButton from "../components/BasicButton";
 
 export default function AddQuizQstn({ navigation }) {
     const [qstn, setQstn] = useState("");

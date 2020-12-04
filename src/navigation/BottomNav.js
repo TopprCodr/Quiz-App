@@ -2,10 +2,8 @@ import * as React from 'react';
 import { BottomNavigation, Text } from 'react-native-paper';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
-
-
-import QuizStack from './QuizStack';
-import Profile from './Profile';
+import MyQuizStack from './MyQuizStack';
+import Profile from '../screens/Profile';
 
 const theme = {
     ...DefaultTheme,
@@ -29,7 +27,7 @@ function BottomNav({ navigation }) {
 
     const renderScene = BottomNavigation.SceneMap({
         friends: FriendsRoute,
-        quiz: QuizStack,
+        quiz: MyQuizStack,
         profile: Profile,
     });
 

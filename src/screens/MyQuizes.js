@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 
-import QuizItem from "./QuizItem";
+import QuizItem from "../components/QuizItem";
 
 export default function MyQuizes({ navigation }) {
     const [quiz, setQuiz] = useState([{

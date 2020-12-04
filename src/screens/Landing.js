@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import BasicButton from "./BasicButton";
+import BasicButton from "../components/BasicButton";
 
 export default function Landing({ navigation }) {
     const [isLoading, setIsLoading] = useState(true);

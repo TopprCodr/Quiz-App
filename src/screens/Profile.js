@@ -5,7 +5,7 @@ import { PieChart } from 'react-native-chart-kit'
 
 import { DefaultTheme, Provider as PaperProvider, Appbar } from 'react-native-paper';
 
-import BasicButton from "./BasicButton";
+import BasicButton from "../components/BasicButton";
 
 const theme = {
     ...DefaultTheme,
@@ -75,7 +75,7 @@ export default function Profile() {
                     <View style={styles.imageContainer}>
                         <Image source={{ uri: image }} style={styles.image} />
                         <TouchableOpacity onPress={handleProfilePicEditBtnClick}>
-                            <Image source={require('../assets/edit.png')} style={styles.editIcon} />
+                            <Image source={require('../../assets/edit.png')} style={styles.editIcon} />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.divider}></View>

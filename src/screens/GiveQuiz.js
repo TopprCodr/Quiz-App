@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 
-import BasicButton from "./BasicButton";
+import BasicButton from "../components/BasicButton";
 
 export default function GiveQuiz() {
     const [quizDetails, setQuizDetails] = useState({
@@ -87,10 +87,10 @@ export default function GiveQuiz() {
 
                                     const isAns = item.is_ans;
                                     if (selectedOptionIdx == idx && isAns) {
-                                        optionImgSrc = require("../assets/rightOption.png");
+                                        optionImgSrc = require("../../assets/rightOption.png");
                                         optionBorder = styles.rightAnsBorder;
                                     } else if (selectedOptionIdx == idx && !isAns) {
-                                        optionImgSrc = require("../assets/wrongOption.png");
+                                        optionImgSrc = require("../../assets/wrongOption.png");
                                         optionBorder = styles.wrongAnsBorder;
                                     }
 

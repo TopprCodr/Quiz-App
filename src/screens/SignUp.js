@@ -3,11 +3,12 @@ import { StyleSheet, Text, View, TextInput, ScrollView, ActivityIndicator, } fro
 import { Picker } from '@react-native-picker/picker';
 import ValidationComponent from 'react-native-form-validator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import firebase from './FirebaseConfig';
 
-import BasicButton from "./BasicButton";
-import LoginSignUpBtn from "./LoginSignUpBtn";
-import SnackBar from "./SnackBar";
+import firebase from '../FirebaseConfig';
+
+import BasicButton from "../components/BasicButton";
+import LoginSignUpBtn from "../components/LoginSignUpBtn";
+import SnackBar from "../components/SnackBar";
 
 export default class SignUp extends ValidationComponent {
     constructor(props) {

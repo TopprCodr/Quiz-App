@@ -17,7 +17,7 @@ export default function QuizItem({
             {
                 imageUrl ?
                     <Image source={{ uri: imageUrl }} style={styles.image} />
-                    : <Image source={require("../assets/quiz.jpg")} style={styles.image} />
+                    : <Image source={require("../../assets/quiz.jpg")} style={styles.image} />
             }
 
             <Text style={styles.boxText}>{name}</Text>

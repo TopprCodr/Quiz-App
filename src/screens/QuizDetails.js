@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 
-import BasicButton from "./BasicButton";
+import BasicButton from "../components/BasicButton";
 
 export default function QuizDetails({ navigation }) {
     const [quizDetails, setQuizDetails] = useState({

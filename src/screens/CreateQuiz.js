@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, ScrollView, Image, Platform } from '
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 
-import BasicButton from "./BasicButton";
+import BasicButton from "../components/BasicButton";
 
 export default function CreateQuiz({ navigation }) {
     const [availableQuizTypes, setAvailableQuizTypes] = useState(["Maths Quiz", "Science Quiz", "History Quiz", "Social Science", "Hindi Quiz", "English Quiz", "Sports Quiz", "Tech Quiz", "Arts Quiz", "General Quiz"]); //will be fetched from db

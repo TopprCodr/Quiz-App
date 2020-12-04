@@ -11,6 +11,17 @@ import {
 
 import BottomNav from './BottomNav';
 
+const theme = {
+    ...DefaultTheme,
+    roundness: 2,
+    colors: {
+        ...DefaultTheme.colors,
+        primary: 'rgba(113, 205, 220, 0.3)',
+        accent: '#3498db',
+    },
+};
+const Drawer = createDrawerNavigator();
+
 function CustomDrawerContent(props) {
     return (
         <DrawerContentScrollView {...props}>
@@ -21,36 +32,16 @@ function CustomDrawerContent(props) {
 
             <DrawerItem
                 label="About"
-                onPress={() => props.navigation.navigate("Landing")}
+                onPress={() => props.navigation.navigate("About")}
             />
-            <DrawerItem
-                label="Help"
 
-            />
-            <DrawerItem
-                label="Contact Us"
-
-            />
             <DrawerItem
                 label="Sign Out"
-
+            // onPress={() => props.navigation.navigate("About")}
             />
-
         </DrawerContentScrollView>
     );
 }
-
-const Drawer = createDrawerNavigator();
-
-const theme = {
-    ...DefaultTheme,
-    roundness: 2,
-    colors: {
-        ...DefaultTheme.colors,
-        primary: 'rgba(113, 205, 220, 0.3)',
-        accent: '#3498db',
-    },
-};
 
 function MyDrawer() {
     return (
@@ -75,9 +66,9 @@ function DrawerNav({ navigation }) {
         <PaperProvider theme={theme}>
             <Appbar.Header>
                 <Appbar.Action icon="menu" onPress={() => navigation.dispatch(DrawerActions.openDrawer())} />
-                <Appbar.Content title="Title" subtitle="Subtitle" />
-                {/* <Appbar.Action icon="dots-vertical" /> */}
+                <Appbar.Content title="Quiz App" />
             </Appbar.Header>
+
             <MyDrawer />
         </PaperProvider>
     )

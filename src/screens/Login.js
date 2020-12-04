@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, ActivityIndicator, } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import firebase from './FirebaseConfig';
 
-import BasicButton from "./BasicButton";
-import LoginSignUpBtn from "./LoginSignUpBtn";
-import SnackBar from "./SnackBar";
+import firebase from '../FirebaseConfig';
+
+import BasicButton from "../components/BasicButton";
+import LoginSignUpBtn from "../components/LoginSignUpBtn";
+import SnackBar from "../components/SnackBar";
 
 export default function Login({ navigation }) {
     const [email, setEmail] = useState("");

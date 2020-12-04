@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
-import QuizItem from "./QuizItem";
+import QuizItem from "../components/QuizItem";
 
 export default function UserHome() {
     const [quiz, setQuiz] = useState([

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import SocialProfileItem from "./SocialProfileItem";
+import SocialProfileItem from "../components/SocialProfileItem";
 
 export default function Social() {
     const [users, setUsers] = useState([

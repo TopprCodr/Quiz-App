@@ -4,8 +4,8 @@ import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import * as firebase from 'firebase';
 
-import BasicButton from "./BasicButton";
-import storage from './FirebaseConfig';
+import BasicButton from "../components/BasicButton";
+import storage from '../FirebaseConfig';
 
 export default function Media() {
     const [image, setImage] = useState(null);
