@@ -1,13 +1,23 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import BasicButton from "./BasicButton";
 
 export default function Landing({ navigation }) {
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(async () => {
-        const val = await AsyncStorage.getItem('loggedUserId');
-        console.warn("val", val);
+        //checking if any user is already logged or not
+        const loggedUserId = await AsyncStorage.getItem('loggedUserId');
+        console.log("loggedUserId", loggedUserId);
+
+        if (loggedUserId) {
+            //if user is already logged then redirecting to Home Screen
+            navigation.navigate('Home');
+        } else {
+            setIsLoading(false);
+        }
     }, []);
 
     //function to handle when login btn is clicked on
@@ -23,17 +33,24 @@ export default function Landing({ navigation }) {
     //component rendering
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Quizmania</Text>
-            <View style={styles.divider}></View>
-            <BasicButton
-                text="Login"
-                onPress={handleLoginBtnClick}
-            />
-            <View style={styles.divider}></View>
-            <BasicButton
-                text="Signup"
-                onPress={handleSignUpBtnClick}
-            />
+            {
+                isLoading ?
+                    <ActivityIndicator style={styles.loader} />
+                    :
+                    <>
+                        <Text style={styles.title}>Quizmania</Text>
+                        <View style={styles.divider}></View>
+                        <BasicButton
+                            text="Login"
+                            onPress={handleLoginBtnClick}
+                        />
+                        <View style={styles.divider}></View>
+                        <BasicButton
+                            text="Signup"
+                            onPress={handleSignUpBtnClick}
+                        />
+                    </>
+            }
         </View>
     );
 }
@@ -62,5 +79,9 @@ const styles = StyleSheet.create({
 
     divider: {
         paddingVertical: 8,
+    },
+
+    loader: {
+        marginTop: 10,
     },
 });
