@@ -37,9 +37,6 @@ export default function MyQuizes({ navigation }) {
     //component rendering
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>My Quizzes</Text>
-            <View style={styles.divider}></View>
-
             {
                 quiz.map((item, idx) => {
                     return (

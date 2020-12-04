@@ -3,19 +3,7 @@ import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image,
 import * as ImagePicker from 'expo-image-picker';
 import { PieChart } from 'react-native-chart-kit'
 
-import { DefaultTheme, Provider as PaperProvider, Appbar } from 'react-native-paper';
-
 import BasicButton from "../components/BasicButton";
-
-const theme = {
-    ...DefaultTheme,
-    roundness: 2,
-    colors: {
-        ...DefaultTheme.colors,
-        primary: 'rgba(113, 205, 220, 0.3)',
-        accent: '#3498db',
-    },
-};
 
 export default function Profile() {
     const [image, setImage] = useState("http://2.bp.blogspot.com/-QWj2Wq45014/TzNOfQezNqI/AAAAAAAAAIY/Lvy0m7ZtWRM/s1600/12.jpg");
@@ -66,108 +54,103 @@ export default function Profile() {
 
     //component rendering
     return (
-        <PaperProvider theme={theme}>
-
-            <ScrollView style={styles.container}>
-                <Text style={styles.title}>Profile</Text>
-
-                <View style={styles.form}>
-                    <View style={styles.imageContainer}>
-                        <Image source={{ uri: image }} style={styles.image} />
-                        <TouchableOpacity onPress={handleProfilePicEditBtnClick}>
-                            <Image source={require('../../assets/edit.png')} style={styles.editIcon} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.divider}></View>
-
-                    <Text style={styles.label}>Name</Text>
-                    <TextInput
-                        style={styles.inputField}
-                        placeholder="Enter your name"
-                        value={name}
-                        onChangeText={(val) => setName(val)}
-                    />
-                    <View style={styles.divider}></View>
-
-                    <Text style={styles.label}>Email Address</Text>
-                    <TextInput
-                        style={styles.inputField}
-                        keyboardType="email-address"
-                        placeholder="Enter your registered email"
-                        value={email}
-                        onChangeText={(val) => setEmail(val)}
-                    />
-                    <View style={styles.divider}></View>
-
-                    <Text style={styles.label}>Phone Number</Text>
-                    <TextInput
-                        style={styles.inputField}
-                        keyboardType="number-pad"
-                        placeholder="Enter phone number"
-                        value={phoneNo}
-                        onChangeText={(val) => setPhoneNo(val)}
-                    />
-                    <View style={styles.divider}></View>
-
-                    <Text style={styles.label}>About Yourself</Text>
-                    <TextInput
-                        style={styles.inputField}
-                        multiline
-                        placeholder="describe yourself"
-                        value={aboutYou}
-                        onChangeText={(val) => setAboutYou(val)}
-                    />
-                    <View style={styles.divider}></View>
+        <ScrollView style={styles.container}>
+            <View style={styles.form}>
+                <View style={styles.imageContainer}>
+                    <Image source={{ uri: image }} style={styles.image} />
+                    <TouchableOpacity onPress={handleProfilePicEditBtnClick}>
+                        <Image source={require('../../assets/edit.png')} style={styles.editIcon} />
+                    </TouchableOpacity>
                 </View>
-
-                <Text style={styles.label}>Performance</Text>
-                <Text style={styles.totalData}>Total attempted: {performanceData.total}</Text>
-                <View style={styles.chartContainer}>
-                    <PieChart
-                        data={[
-                            {
-                                name: 'Correct',
-                                population: performanceData.correct,
-                                color: '#34A853',
-                                legendFontColor: '#34A853',
-                                legendFontSize: 14,
-                            },
-                            {
-                                name: 'Incorrect',
-                                population: performanceData.incorrect,
-                                color: '#EB4335',
-                                legendFontColor: '#EB4335',
-                                legendFontSize: 14,
-                            }
-                        ]}
-                        width={Dimensions.get("screen").width}
-                        height={220}
-                        chartConfig={{
-                            backgroundColor: '#e26a00',
-                            backgroundGradientFrom: '#fb8c00',
-                            backgroundGradientTo: '#ffa726',
-                            decimalPlaces: 2, // optional, defaults to 2dp
-                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                            style: {
-                                borderRadius: 16
-                            }
-                        }}
-
-                        accessor="population"
-                        backgroundColor="transparent"
-                        paddingLeft="20"
-                        absolute
-                    />
-                </View>
-
                 <View style={styles.divider}></View>
-                <BasicButton
-                    text="Save"
-                    onPress={handleSaveBtnClick}
+
+                <Text style={styles.label}>Name</Text>
+                <TextInput
+                    style={styles.inputField}
+                    placeholder="Enter your name"
+                    value={name}
+                    onChangeText={(val) => setName(val)}
                 />
                 <View style={styles.divider}></View>
-            </ScrollView>
-        </PaperProvider>
+
+                <Text style={styles.label}>Email Address</Text>
+                <TextInput
+                    style={styles.inputField}
+                    keyboardType="email-address"
+                    placeholder="Enter your registered email"
+                    value={email}
+                    onChangeText={(val) => setEmail(val)}
+                />
+                <View style={styles.divider}></View>
+
+                <Text style={styles.label}>Phone Number</Text>
+                <TextInput
+                    style={styles.inputField}
+                    keyboardType="number-pad"
+                    placeholder="Enter phone number"
+                    value={phoneNo}
+                    onChangeText={(val) => setPhoneNo(val)}
+                />
+                <View style={styles.divider}></View>
+
+                <Text style={styles.label}>About Yourself</Text>
+                <TextInput
+                    style={styles.inputField}
+                    multiline
+                    placeholder="describe yourself"
+                    value={aboutYou}
+                    onChangeText={(val) => setAboutYou(val)}
+                />
+                <View style={styles.divider}></View>
+            </View>
+
+            <Text style={styles.label}>Performance</Text>
+            <Text style={styles.totalData}>Total attempted: {performanceData.total}</Text>
+            <View style={styles.chartContainer}>
+                <PieChart
+                    data={[
+                        {
+                            name: 'Correct',
+                            population: performanceData.correct,
+                            color: '#34A853',
+                            legendFontColor: '#34A853',
+                            legendFontSize: 14,
+                        },
+                        {
+                            name: 'Incorrect',
+                            population: performanceData.incorrect,
+                            color: '#EB4335',
+                            legendFontColor: '#EB4335',
+                            legendFontSize: 14,
+                        }
+                    ]}
+                    width={Dimensions.get("screen").width}
+                    height={220}
+                    chartConfig={{
+                        backgroundColor: '#e26a00',
+                        backgroundGradientFrom: '#fb8c00',
+                        backgroundGradientTo: '#ffa726',
+                        decimalPlaces: 2, // optional, defaults to 2dp
+                        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                        style: {
+                            borderRadius: 16
+                        }
+                    }}
+
+                    accessor="population"
+                    backgroundColor="transparent"
+                    paddingLeft="20"
+                    absolute
+                />
+            </View>
+
+            <View style={styles.divider}></View>
+            <BasicButton
+                text="Save"
+                onPress={handleSaveBtnClick}
+            />
+            <View style={styles.divider}></View>
+        </ScrollView>
     );
 }
 
@@ -184,10 +167,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         letterSpacing: 0.1,
         color: '#2E2E2E',
-    },
-
-    form: {
-        marginTop: 35,
     },
 
     imageContainer: {

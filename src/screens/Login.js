@@ -32,7 +32,7 @@ export default function Login({ navigation }) {
 
                     hideLoader();
                     displaySnackBar("success", "Succesfully logged");
-                    navigation.navigate('Home');
+                    navigation.navigate('Dashboard');
                 } catch {
                     hideLoader();
                     displaySnackBar("error", "Something went wrong");

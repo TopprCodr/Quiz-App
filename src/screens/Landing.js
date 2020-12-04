@@ -14,7 +14,7 @@ export default function Landing({ navigation }) {
 
         if (loggedUserId) {
             //if user is already logged then redirecting to Home Screen
-            navigation.navigate('Home');
+            navigation.navigate('Dashboard');
         } else {
             setIsLoading(false);
         }

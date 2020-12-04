@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { BottomNavigation, Text } from 'react-native-paper';
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { BottomNavigation, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
+import UserHome from '../screens/UserHome';
 import MyQuizStack from './MyQuizStack';
 import Profile from '../screens/Profile';
 
@@ -15,32 +15,27 @@ const theme = {
     },
 };
 
-const FriendsRoute = () => <Text>Friends</Text>;
-
 function BottomNav({ navigation }) {
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
-        { key: 'friends', title: 'Friends', icon: 'account-group' },
-        { key: 'quiz', title: 'Quiz', icon: 'clipboard-text' },
-        { key: 'profile', title: 'Profile', icon: 'account-edit' },
+        { key: 'home', title: 'Home', icon: 'home' },
+        { key: 'myQuizzes', title: 'My Quizzes', icon: 'clipboard-text' },
+        { key: 'profile', title: 'Profile', icon: 'account' },
     ]);
 
     const renderScene = BottomNavigation.SceneMap({
-        friends: FriendsRoute,
-        quiz: MyQuizStack,
+        home: UserHome,
+        myQuizzes: MyQuizStack,
         profile: Profile,
     });
 
     return (
         <PaperProvider theme={theme}>
-
-
             <BottomNavigation
                 navigationState={{ index, routes }}
                 onIndexChange={setIndex}
                 renderScene={renderScene}
             />
-
         </PaperProvider>
     );
 };

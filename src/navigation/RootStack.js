@@ -17,8 +17,7 @@ export default function RootStack() {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="About" component={AboutPage} />
 
-            <Stack.Screen name="Home" component={DrawerNav} options={{ headerShown: false }} />
+            <Stack.Screen name="Dashboard" component={DrawerNav} options={{ headerShown: false }} />
         </Stack.Navigator>
     );
 }
-

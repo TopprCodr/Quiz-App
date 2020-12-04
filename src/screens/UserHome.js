@@ -35,9 +35,6 @@ export default function UserHome() {
     //component rendering
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Home</Text>
-            <View style={styles.divider}></View>
-
             {
                 quiz.map((item, idx) => {
                     return (
@@ -59,7 +56,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        marginTop: 60,
+        paddingTop: 10,
         paddingHorizontal: 30,
     },
 
