@@ -1,32 +1,49 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, ActivityIndicator, } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import firebase from './FirebaseConfig';
 
 import BasicButton from "./BasicButton";
 import LoginSignUpBtn from "./LoginSignUpBtn";
+import SnackBar from "./SnackBar";
 
 export default function Login({ navigation }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [snackBarVisible, setSnackBarVisible] = useState(false);
+    const [snackBarText, setSnackBarText] = useState("");
+    const [snackBarType, setSnackBarType] = useState("");
+
     //function to handle when login btn is clicked on
     function handleLoginBtnClick() {
-        console.log("login clicked", email, password);
+        displayLoader();
+        //doing firebase auth
         firebase.auth().signInWithEmailAndPassword(email, password)
-            .then((user) => {
-                console.log(user);
-                navigation.navigate('Home');
+            .then(async (user) => {
+                try {
+                    const userId = user.user.uid;
+
+                    //making cookie of the logged user
+                    await AsyncStorage.setItem("loggedUserEmail", email);
+                    await AsyncStorage.setItem("loggedUserId", userId);
+
+                    hideLoader();
+                    displaySnackBar("success", "Succesfully logged");
+                    navigation.navigate('Home');
+                } catch {
+                    hideLoader();
+                    displaySnackBar("error", "Something went wrong");
+                }
             })
             .catch((error) => {
                 var errorCode = error.code;
                 var errorMessage = error.message;
-                console.log(errorMessage);
-            });
-    }
 
-    //function to handle when google login btn is clicked on
-    function handleGoogleLoginBtnClick() {
-        console.log("google login clicked");
+                hideLoader();
+                displaySnackBar("error", errorMessage);
+            });
     }
 
     //function to handle when signup btn is clicked on
@@ -35,44 +52,83 @@ export default function Login({ navigation }) {
         navigation.navigate('Signup');
     }
 
+    //function to display snackbar
+    function displaySnackBar(type, text) {
+        setSnackBarType(type);
+        setSnackBarText(text);
+        setSnackBarVisible(true);
+    }
+
+    //function to hide snackbar
+    function hideSnackBar() {
+        setSnackBarVisible(false);
+    }
+
+    //function to toogle loading bar
+    function displayLoader() {
+        setIsLoading(true);
+    }
+
+    function hideLoader() {
+        setIsLoading(false);
+    }
+
     //component rendering
     return (
-        <ScrollView style={styles.container}>
+        <>
+            <ScrollView style={styles.container}>
+                <View style={styles.form}>
+                    <Text style={styles.label}>Email Address</Text>
+                    <TextInput
+                        style={styles.inputField}
+                        keyboardType="email-address"
+                        placeholder="Enter your registered email"
+                        value={email}
+                        onChangeText={(val) => setEmail(val)}
+                    />
 
-            <View style={styles.form}>
-                <Text style={styles.label}>Email Address</Text>
-                <TextInput
-                    style={styles.inputField}
-                    keyboardType="email-address"
-                    placeholder="Enter your registered email"
-                    value={email}
-                    onChangeText={(val) => setEmail(val)}
+                    <View style={styles.divider}></View>
+
+                    <Text style={styles.label}>Password</Text>
+                    <TextInput
+                        style={styles.inputField}
+                        secureTextEntry
+                        placeholder="Enter password"
+                        value={password}
+                        onChangeText={(val) => setPassword(val)}
+                    />
+                </View>
+
+                <BasicButton
+                    text="Login"
+                    onPress={handleLoginBtnClick}
                 />
 
-                <View style={styles.divider}></View>
+                {
+                    isLoading ?
+                        <ActivityIndicator style={styles.loader} />
+                        : null
+                }
 
-                <Text style={styles.label}>Password</Text>
-                <TextInput
-                    style={styles.inputField}
-                    secureTextEntry
-                    placeholder="Enter password"
-                    value={password}
-                    onChangeText={(val) => setPassword(val)}
+                <LoginSignUpBtn
+                    customStyle={styles.signup}
+                    text="Don’t have an account?"
+                    btnText="Sign up"
+                    onPress={handleSignUpBtnClick}
                 />
-            </View>
+            </ScrollView>
 
-            <BasicButton
-                text="Login"
-                onPress={handleLoginBtnClick}
-            />
-
-            <LoginSignUpBtn
-                customStyle={styles.signup}
-                text="Don’t have an account?"
-                btnText="Sign up"
-                onPress={handleSignUpBtnClick}
-            />
-        </ScrollView>
+            {
+                snackBarVisible ?
+                    <SnackBar
+                        isVisible={snackBarVisible}
+                        text={snackBarText}
+                        type={snackBarType}
+                        onClose={hideSnackBar}
+                    />
+                    : null
+            }
+        </>
     );
 }
 
@@ -113,9 +169,8 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
     },
 
-    log: {
-        textAlign: "center",
-        marginVertical: 2,
+    loader: {
+        marginTop: 10,
     },
 
     signup: {

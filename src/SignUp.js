@@ -1,11 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, ActivityIndicator, } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import firebase from './FirebaseConfig';
-
 import { Picker } from '@react-native-picker/picker';
 import ValidationComponent from 'react-native-form-validator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firebase from './FirebaseConfig';
 
 import BasicButton from "./BasicButton";
 import LoginSignUpBtn from "./LoginSignUpBtn";
@@ -55,7 +53,7 @@ export default class SignUp extends ValidationComponent {
                         //inserting user data in firebase db
                         const userId = user.user.uid;
                         const name = this.state.name;
-                        const email = this.state.email
+                        const email = this.state.email;
                         const ageGroup = this.state.ageGroup;
 
                         const usersDbRef = firebase.app().database().ref('users/');

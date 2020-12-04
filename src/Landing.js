@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import BasicButton from "./BasicButton";
 
 export default function Landing({ navigation }) {
+    useEffect(async () => {
+        const val = await AsyncStorage.getItem('loggedUserId');
+        console.warn("val", val);
+    }, []);
+
     //function to handle when login btn is clicked on
     function handleLoginBtnClick() {
-        console.log("login clicked");
         navigation.navigate('Login');
     }
 
     //function to handle when signup btn is clicked on
     function handleSignUpBtnClick() {
-        console.log("signup clicked");
         navigation.navigate('Signup');
     }
 
