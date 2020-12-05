@@ -68,6 +68,7 @@ export default function MyQuizes({ navigation }) {
 
     //function to handle when any quiz item is clicked on
     function handleQuizItemClick(index) {
+        console.log("navigation", navigation);
         console.log(index);
     }
 

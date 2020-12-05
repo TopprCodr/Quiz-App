@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import firebase from '../FirebaseConfig';
@@ -8,7 +7,7 @@ import firebase from '../FirebaseConfig';
 import QuizItem from "../components/QuizItem";
 import SnackBar from "../components/SnackBar";
 
-export default function UserHome() {
+export default function UserHome({ navigation }) {
     const [quiz, setQuiz] = useState([]);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -69,7 +68,10 @@ export default function UserHome() {
 
     //function to handle when any quiz item is clicked on
     function handleQuizItemClick(index) {
-        console.log(index);
+        console.log("give quiz", index);
+
+        // redirecting to GiveQuiz.js
+        navigation.navigate('GiveQuiz');
     }
 
     //component rendering

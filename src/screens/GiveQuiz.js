@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'rea
 
 import BasicButton from "../components/BasicButton";
 
-export default function GiveQuiz() {
+export default function GiveQuiz({ navigation }) {
     const [quizDetails, setQuizDetails] = useState({
         "quiz_name": "Cars Quiz",
         "quiz_img_uri": "https://www.autocar.co.uk/sites/autocar.co.uk/files/styles/gallery_slide/public/images/car-reviews/first-drives/legacy/1-corvette-stingray-c8-2019-fd-hr-hero-front.jpg?itok=lZDgmaY1",
@@ -82,7 +82,7 @@ export default function GiveQuiz() {
                         <View style={styles.optionsContainer}>
                             {
                                 options.map((item, idx) => {
-                                    let optionImgSrc = require("../assets/option.png");
+                                    let optionImgSrc = require("../../assets/option.png");
                                     let optionBorder = null;
 
                                     const isAns = item.is_ans;
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     scroll: {
         flex: 1,
         backgroundColor: '#fff',
-        marginTop: 60,
+        paddingTop: 10,
     },
 
     container: {
