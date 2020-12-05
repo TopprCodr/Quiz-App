@@ -1,31 +1,71 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import firebase from '../FirebaseConfig';
 
 import QuizItem from "../components/QuizItem";
+import SnackBar from "../components/SnackBar";
 
 export default function UserHome() {
-    const [quiz, setQuiz] = useState([
-        {
-            "quiz_name": "Cars Quiz",
-            "quiz_img_uri": "https://www.autocar.co.uk/sites/autocar.co.uk/files/styles/gallery_slide/public/images/car-reviews/first-drives/legacy/1-corvette-stingray-c8-2019-fd-hr-hero-front.jpg?itok=lZDgmaY1",
-        },
-        {
-            "quiz_name": "Robotics Quiz",
-            "quiz_img_uri": "https://www.disruptivestatic.com/wp-content/uploads/2018/05/machine-learning-ecommerce-blog-1.jpg",
-        },
-        {
-            "quiz_name": "Cricket Quiz",
-            "quiz_img_uri": "https://wp-seo-mainpage.s3-accelerate.amazonaws.com/uploads/cricket-players.jpg",
-        },
-        {
-            "quiz_name": "NLM Quiz",
-            "quiz_img_uri": "https://image1.slideserve.com/2650227/newton-s-first-law-of-motion-n.jpg",
-        },
-        {
-            "quiz_name": "Politics Quiz",
-            "quiz_img_uri": "https://www.pambazuka.org/sites/default/files/styles/flexslider_full/public/field/image/event-page-identity-politics_0.jpeg?itok=6HOE-fVZ",
-        },
-    ]); //will be fetched from db
+    const [quiz, setQuiz] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [snackBarVisible, setSnackBarVisible] = useState(false);
+    const [snackBarText, setSnackBarText] = useState("");
+    const [snackBarType, setSnackBarType] = useState("");
+
+    //component did mount
+    useEffect(() => {
+        //getting users quizes from firebase db
+        fetchUsersQuizes();
+    }, []);
+
+    //function to fetch quizes of the user
+    async function fetchUsersQuizes() {
+        const loggedUserId = await AsyncStorage.getItem('loggedUserId');
+        if (loggedUserId) {
+            const quizesDbRef = firebase.app().database().ref('quizes/');
+            quizesDbRef
+                .once('value')
+                .then(resp => {
+                    const quizes = resp.val();
+                    if (quizes) {
+                        //sorting out quizes of that user
+                        let quizzes = [];
+                        for (const key in quizes) {
+                            const quiz = quizes[key];
+                            const createdByUserId = quiz.createdByUserId;
+
+                            if (createdByUserId !== loggedUserId) {
+                                quizzes.push(quiz);
+                            }
+                        }
+                        quizzes.reverse();
+                        setQuiz(quizzes);
+                    }
+                    setIsLoading(false);
+                })
+                .catch(error => {
+                    displaySnackBar("error", "Failed to get user's quizes");
+                });
+        } else {
+            displaySnackBar("error", "User is not logged in");
+        }
+    }
+
+    //function to display snackbar
+    function displaySnackBar(type, text) {
+        setSnackBarType(type);
+        setSnackBarText(text);
+        setSnackBarVisible(true);
+    }
+
+    //function to hide snackbar
+    function hideSnackBar() {
+        setSnackBarVisible(false);
+    }
 
     //function to handle when any quiz item is clicked on
     function handleQuizItemClick(index) {
@@ -34,21 +74,41 @@ export default function UserHome() {
 
     //component rendering
     return (
-        <ScrollView style={styles.container}>
+        <>
             {
-                quiz.map((item, idx) => {
-                    return (
-                        <QuizItem
-                            key={idx}
-                            index={idx}
-                            name={item.quiz_name}
-                            imageUrl={item.quiz_img_uri}
-                            onPress={handleQuizItemClick}
-                        />
-                    )
-                })
+                isLoading ?
+                    <View style={styles.loaderContainer}>
+                        <ActivityIndicator style={styles.loader} />
+                    </View>
+                    :
+                    <ScrollView style={styles.container}>
+                        {
+                            quiz.map((item, idx) => {
+                                return (
+                                    <QuizItem
+                                        key={idx}
+                                        index={idx}
+                                        name={item.quizName}
+                                        imageUrl={item.quizImgUri}
+                                        onPress={handleQuizItemClick}
+                                    />
+                                )
+                            })
+                        }
+                    </ScrollView >
             }
-        </ScrollView >
+
+            {
+                snackBarVisible ?
+                    <SnackBar
+                        isVisible={snackBarVisible}
+                        text={snackBarText}
+                        type={snackBarType}
+                        onClose={hideSnackBar}
+                    />
+                    : null
+            }
+        </>
     );
 }
 
@@ -71,14 +131,10 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
     },
 
-    addNewBtn: {
-        marginTop: 35,
-        alignItems: "center",
-    },
-
-    addNewBtnText: {
-        fontWeight: '500',
-        fontSize: 16,
-        color: '#2A34DC'
+    loaderContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+        paddingHorizontal: 30,
+        justifyContent: "center",
     },
 });
