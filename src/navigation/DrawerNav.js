@@ -6,6 +6,7 @@ import {
     DrawerContentScrollView,
     DrawerItem,
 } from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import BottomNav from './BottomNav';
 
@@ -21,6 +22,7 @@ const theme = {
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props) {
+    // console.log("props", props);
     return (
         <DrawerContentScrollView {...props}>
             <DrawerItem
@@ -35,18 +37,25 @@ function CustomDrawerContent(props) {
 
             <DrawerItem
                 label="Sign Out"
-            // onPress={() => props.navigation.navigate("About")}
+                onPress={() => hanldeLogoutPress(props)}
             />
         </DrawerContentScrollView>
     );
 }
 
-function MyDrawer() {
-    return (
-        <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-            <Drawer.Screen name="Home" component={BottomNav} />
-        </Drawer.Navigator>
-    );
+async function hanldeLogoutPress(props) {
+    try {
+        await AsyncStorage.removeItem("loggedUserEmail");
+        await AsyncStorage.removeItem("loggedUserId");
+
+        console.log("successfully logged out");
+
+        //redirecring to ladnding page
+        props.navigation.push("Landing");
+    }
+    catch (exception) {
+        console.log("failed to log out");
+    }
 }
 
 function DrawerNav({ navigation }) {
@@ -67,7 +76,9 @@ function DrawerNav({ navigation }) {
                 <Appbar.Content title="Quiz App" />
             </Appbar.Header>
 
-            <MyDrawer />
+            <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
+                <Drawer.Screen name="Home" component={BottomNav} />
+            </Drawer.Navigator>
         </PaperProvider>
     )
 }

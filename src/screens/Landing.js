@@ -20,6 +20,13 @@ export default function Landing({ navigation }) {
                 setIsLoading(false);
             }
         })();
+
+        //to prevent going back
+        navigation.addListener('beforeRemove', (e) => {
+            // Prevent default behavior of leaving the screen
+            e.preventDefault();
+            console.log("back pressed in landing");
+        });
     }, []);
 
     //function to handle when login btn is clicked on
