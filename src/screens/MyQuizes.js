@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import firebase from '../FirebaseConfig';
 
 import QuizItem from "../components/QuizItem";
 
@@ -22,6 +25,51 @@ export default function MyQuizes({ navigation }) {
     },
     ]); //will be fetched from db
 
+    const [isLoading, setIsLoading] = useState(true);
+    const [snackBarVisible, setSnackBarVisible] = useState(false);
+    const [snackBarText, setSnackBarText] = useState("");
+    const [snackBarType, setSnackBarType] = useState("");
+
+    //component did mount
+    useEffect(() => {
+        //getting users data from firebase
+        fetchUsersQuizes();
+    }, []);
+
+    //function to fetch quizes of the user
+    async function fetchUsersQuizes() {
+        const loggedUserId = await AsyncStorage.getItem('loggedUserId');
+        if (loggedUserId) {
+            const usersDbRef = firebase.app().database().ref('users/');
+            usersDbRef
+                .child(loggedUserId)
+                .once('value')
+                .then(resp => {
+                    const response = resp.val();
+                    if (response) {
+                        setIsLoading(false);
+                    }
+                })
+                .catch(error => {
+                    displaySnackBar("error", "Failed to fetch profile");
+                });
+        } else {
+            displaySnackBar("error", "User is not logged in");
+        }
+    }
+
+    //function to display snackbar
+    function displaySnackBar(type, text) {
+        setSnackBarType(type);
+        setSnackBarText(text);
+        setSnackBarVisible(true);
+    }
+
+    //function to hide snackbar
+    function hideSnackBar() {
+        setSnackBarVisible(false);
+    }
+
     //function to handle when any quiz item is clicked on
     function handleQuizItemClick(index) {
         console.log(index);
@@ -36,25 +84,45 @@ export default function MyQuizes({ navigation }) {
 
     //component rendering
     return (
-        <ScrollView style={styles.container}>
+        <>
             {
-                quiz.map((item, idx) => {
-                    return (
-                        <QuizItem
-                            key={idx}
-                            index={idx}
-                            name={item.quiz_name}
-                            imageUrl={item.quiz_img_uri}
-                            onPress={handleQuizItemClick}
-                        />
-                    )
-                })
+                isLoading ?
+                    <View style={styles.loaderContainer}>
+                        <ActivityIndicator style={styles.loader} />
+                    </View>
+                    :
+                    <ScrollView style={styles.container}>
+                        {
+                            quiz.map((item, idx) => {
+                                return (
+                                    <QuizItem
+                                        key={idx}
+                                        index={idx}
+                                        name={item.quiz_name}
+                                        imageUrl={item.quiz_img_uri}
+                                        onPress={handleQuizItemClick}
+                                    />
+                                )
+                            })
+                        }
+
+                        <TouchableOpacity style={styles.addNewBtn} onPress={handleAddNewQuizBtnClick}>
+                            <Text style={styles.addNewBtnText}>+ Add new quiz</Text>
+                        </TouchableOpacity>
+                    </ScrollView >
             }
 
-            <TouchableOpacity style={styles.addNewBtn} onPress={handleAddNewQuizBtnClick}>
-                <Text style={styles.addNewBtnText}>+ Add new quiz</Text>
-            </TouchableOpacity>
-        </ScrollView >
+            {
+                snackBarVisible ?
+                    <SnackBar
+                        isVisible={snackBarVisible}
+                        text={snackBarText}
+                        type={snackBarType}
+                        onClose={hideSnackBar}
+                    />
+                    : null
+            }
+        </>
     );
 }
 
@@ -86,5 +154,12 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         fontSize: 16,
         color: '#2A34DC'
+    },
+
+    loaderContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+        paddingHorizontal: 30,
+        justifyContent: "center",
     },
 });

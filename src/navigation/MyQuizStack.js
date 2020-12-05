@@ -11,10 +11,9 @@ export default function MyQuizStack() {
     return (
         <Stack.Navigator>
             <Stack.Screen name="MyQuizes" component={MyQuizes} options={{ headerShown: false }} />
-            <Stack.Screen name="CreateQuiz" component={CreateQuiz} />
-            <Stack.Screen name="QuizDetails" component={QuizDetails} />
-            <Stack.Screen name="Add Question" component={AddQuizQstn} />
+            <Stack.Screen name="CreateQuiz" component={CreateQuiz} options={{ headerShown: false }} />
+            <Stack.Screen name="QuizDetails" component={QuizDetails} options={{ headerShown: false }} />
+            <Stack.Screen name="Add Question" component={AddQuizQstn} options={{ headerShown: false }} />
         </Stack.Navigator>
     );
 }
-
