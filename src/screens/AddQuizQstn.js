@@ -28,6 +28,7 @@ export default function AddQuizQstn({ route: {
             const timeStamp = Math.floor(Date.now() / 1000);
             const qstnId = quizId + "_qstn_" + timeStamp;
 
+            //adding qstn for that quiz in firebase
             const quizDbRef = firebase.app().database().ref('quizes/');
             quizDbRef
                 .child(quizId + "/questions/" + qstnId)
