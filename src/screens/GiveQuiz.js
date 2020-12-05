@@ -1,58 +1,41 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import BasicButton from "../components/BasicButton";
 
-export default function GiveQuiz({ navigation }) {
-    const [quizDetails, setQuizDetails] = useState({
-        "quiz_name": "Cars Quiz",
-        "quiz_img_uri": "https://www.autocar.co.uk/sites/autocar.co.uk/files/styles/gallery_slide/public/images/car-reviews/first-drives/legacy/1-corvette-stingray-c8-2019-fd-hr-hero-front.jpg?itok=lZDgmaY1",
-        "quiz_type": "Computer Quiz",
-        "quiz_desc": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy",
-        "questions": [
-            {
-                "question_id": "jihugyftughiugyu",
-                "title": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy?",
-                "options": [
-                    {
-                        "option_id": "7t6rfuyghkg765tfuyig",
-                        "title": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's stand",
-                        "is_ans": false,
-                    },
-                    {
-                        "option_id": "7t6rfuyghkg765tfuyig",
-                        "title": "singh",
-                        "is_ans": true,
-                    },
-                    {
-                        "option_id": "7t6rfuyghkg765tfuyig",
-                        "title": "suman",
-                        "is_ans": false,
-                    },
-                    {
-                        "option_id": "7t6rfuyghkg765tfuyig",
-                        "title": "deep",
-                        "is_ans": false,
-                    }
-                ]
-            },
-            {
-                "question_id": "jihugyftughiugyu",
-                "title": "where do u live?",
-            },
-            {
-                "question_id": "jihugyftughiugyu",
-                "title": "what is ur age?",
-            },
-            {
-                "question_id": "jihugyftughiugyu",
-                "title": "how are you?",
-            },
-        ]
-    }); //will be fetched from db
+export default function GiveQuiz({ route: {
+    params: {
+        quizImgUri,
+        quizName,
+        questions,
+    } = {},
+} = {},
+    navigation,
+}) {
+    const totalQstnsCount = Object.keys(questions).length || 0;
 
-    const [activeQstnIdx, setActiveQstnIdx] = useState(1);
+    const [quizQsnts, setQuizQsnts] = useState([]);
+
+    const [activeQstnIdx, setActiveQstnIdx] = useState(0);
     const [selectedOptionIdx, setSelectedOptionIdx] = useState(null);
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (questions) {
+            //shuffling options of the qstn
+            let qstns = [];
+            for (const qstnId in questions) {
+                let qstn = questions[qstnId];
+                let options = qstn.options;
+                options = shuffle(options);
+                qstn["options"] = options;
+                qstns.push(qstn);
+            }
+            setQuizQsnts(qstns);
+            setIsLoading(false);
+        }
+    }, []);
 
     //function to handle when any option is clicked clicked on
     function handleOptionPressed(idx) {
@@ -63,63 +46,64 @@ export default function GiveQuiz({ navigation }) {
 
     //function to rdner question
     function renderQuestion() {
-        if (quizDetails.questions) {
-            const selectedQstnNo = activeQstnIdx + 1;
-            const totalQstnsCount = quizDetails.questions.length;
-
-            const selectedQuestion = quizDetails.questions[activeQstnIdx] || {};
-            const questionText = selectedQuestion.title;
+        if (questions) {
+            const selectedQuestion = quizQsnts[activeQstnIdx] || {};
             const options = selectedQuestion.options || [];
 
+            //rendering
             return (
-                <View style={styles.containerRelative}>
-                    <View style={styles.containerAbs}>
-                        <View style={styles.qstnContainer}>
-                            <Text style={styles.qstnCount}>{selectedQstnNo + " of " + totalQstnsCount}</Text>
-                            <Text style={styles.qstnText}>{questionText}</Text>
-                        </View>
-
-                        <View style={styles.optionsContainer}>
-                            {
-                                options.map((item, idx) => {
-                                    let optionImgSrc = require("../../assets/option.png");
-                                    let optionBorder = null;
-
-                                    const isAns = item.is_ans;
-                                    if (selectedOptionIdx == idx && isAns) {
-                                        optionImgSrc = require("../../assets/rightOption.png");
-                                        optionBorder = styles.rightAnsBorder;
-                                    } else if (selectedOptionIdx == idx && !isAns) {
-                                        optionImgSrc = require("../../assets/wrongOption.png");
-                                        optionBorder = styles.wrongAnsBorder;
-                                    }
-
-                                    return (
-                                        <TouchableOpacity
-                                            key={idx}
-                                            style={[styles.option, optionBorder]}
-                                            onPress={() => handleOptionPressed(idx)}
-                                        >
-                                            <Text style={styles.optionText}>{item.title}</Text>
-                                            <Image style={styles.optionImg} source={optionImgSrc} />
-                                        </TouchableOpacity>
-                                    )
-                                })
-                            }
-                        </View>
-
-                        <View style={[styles.container, styles.btnsContainer]}>
-                            {renderDirectionButtons()}
-                        </View>
+                <ScrollView style={styles.scroll}>
+                    <View style={styles.qstnContainer}>
+                        <Text style={styles.qstnCount}>{activeQstnIdx + 1 + " of " + totalQstnsCount}</Text>
+                        <Text style={styles.qstnText}>{selectedQuestion.question}</Text>
                     </View>
-                </View>
+
+                    {
+                        options.map((item, idx) => {
+                            let optionImgSrc = require("../../assets/option.png");
+                            let optionBorder = null;
+
+                            const isAns = item.isAns;
+                            if (selectedOptionIdx == idx && isAns) {
+                                optionImgSrc = require("../../assets/rightOption.png");
+                                optionBorder = styles.rightAnsBorder;
+                            } else if (selectedOptionIdx == idx && !isAns) {
+                                optionImgSrc = require("../../assets/wrongOption.png");
+                                optionBorder = styles.wrongAnsBorder;
+                            }
+
+                            return (
+                                <TouchableOpacity
+                                    key={idx}
+                                    style={[styles.option, optionBorder]}
+                                    onPress={() => handleOptionPressed(idx)}
+                                >
+                                    <Text style={styles.optionText}>{item.option}</Text>
+                                    <Image style={styles.optionImg} source={optionImgSrc} />
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+
+                    <View style={[styles.container, styles.btnsContainer]}>
+                        {renderDirectionButtons()}
+                    </View>
+
+                    <View style={styles.divider}></View>
+                    <BasicButton
+                        key={1}
+                        text="Submit"
+                        onPress={hanldeNextBtnClick}
+                    />
+                    <View style={styles.divider}></View>
+                    <View style={styles.divider}></View>
+                </ScrollView>
             )
         }
     }
 
     //function to render direction buttons
     function renderDirectionButtons() {
-        const totalQstnsCount = quizDetails.questions.length || 0;
         let html = [];
 
         //prev btn
@@ -148,34 +132,62 @@ export default function GiveQuiz({ navigation }) {
     //function to handle next/prev btn click
     function hanldePrevBtnClick() {
         if (activeQstnIdx > 0) {
+            setSelectedOptionIdx(null);
             setActiveQstnIdx(activeQstnIdx - 1);
         }
     }
 
     function hanldeNextBtnClick() {
-        const totalQstnsCount = quizDetails.questions.length || 0;
         if (activeQstnIdx < totalQstnsCount - 1) {
+            setSelectedOptionIdx(null);
             setActiveQstnIdx(activeQstnIdx + 1);
         }
     }
 
+    //function to shuffle options
+    function shuffle(array) {
+        var currentIndex = array.length, temporaryValue, randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            // And swap it with the current element.
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+    }
+
     //component rendering
     return (
-        <ScrollView style={styles.scroll}>
-            <View style={styles.container}>
-                <Text style={styles.title}>{quizDetails.quiz_name}</Text>
-                <View style={styles.divider}></View>
-            </View>
+        <View style={styles.root}>
+            {
+                isLoading ?
+                    <ActivityIndicator style={styles.loader} />
+                    :
+                    <>
+                        <View style={styles.container}>
+                            <Text style={styles.title}>{quizName}</Text>
+                            <View style={styles.divider}></View>
+                        </View>
 
-            <Image source={{ uri: quizDetails.quiz_img_uri }} style={styles.image} />
+                        <Image source={quizImgUri || require("../../assets/quiz.jpg")} style={styles.image} />
 
-            {renderQuestion()}
-        </ScrollView >
+                        {renderQuestion()}
+                    </>
+            }
+        </View >
     );
 }
 
 const styles = StyleSheet.create({
-    scroll: {
+    root: {
         flex: 1,
         backgroundColor: '#fff',
         paddingTop: 10,
@@ -197,29 +209,22 @@ const styles = StyleSheet.create({
     },
 
     image: {
+        position: 'absolute',
+        top: 40,
+        left: 0,
+        right: 0,
         alignSelf: "center",
         width: "100%",
         height: 250,
         backgroundColor: "#f1f1f1",
     },
 
-    containerRelative: {
-        position: "relative",
-    },
-
-    containerAbs: {
-        position: 'absolute',
-        top: -70,
-        left: 0,
-        right: 0,
-        width: "100%",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingHorizontal: 25,
+    scroll: {
+        marginTop: 150,
+        paddingHorizontal: 30,
     },
 
     qstnContainer: {
-        width: "100%",
         backgroundColor: "#fff",
         padding: 8,
         shadowColor: 'black',
@@ -245,11 +250,8 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
 
-    optionsContainer: {
-        width: "100%",
-    },
-
     option: {
+        backgroundColor: "#fff",
         marginVertical: 12,
         paddingHorizontal: 16,
         paddingVertical: 12,
@@ -286,6 +288,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         marginVertical: 20,
+        // paddingBottom: 100,
     },
 
     button: {

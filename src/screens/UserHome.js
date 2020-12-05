@@ -71,7 +71,7 @@ export default function UserHome({ navigation }) {
         console.log("give quiz", index);
 
         // redirecting to GiveQuiz.js
-        navigation.navigate('GiveQuiz');
+        navigation.navigate('GiveQuiz', quiz[index]);
     }
 
     //component rendering
