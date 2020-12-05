@@ -41,6 +41,7 @@ export default function MyQuizes({ navigation }) {
                                 myQuizes.push(quiz);
                             }
                         }
+                        myQuizes.reverse();
                         setMyQuizzes(myQuizes);
                         setIsLoading(false);
                     }

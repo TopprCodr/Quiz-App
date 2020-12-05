@@ -12,7 +12,7 @@ import BasicButton from "../components/BasicButton";
 export default function CreateQuiz({ navigation }) {
     const [availableQuizTypes, setAvailableQuizTypes] = useState([]);
 
-    const [image, setImage] = useState(null);
+    const [quizImgUri, setQuizImgUri] = useState(null);
     const [quizName, setQuizName] = useState("");
     const [quizDesc, setQuizDesc] = useState("");
     const [quizType, setQuizType] = useState("");
@@ -75,14 +75,93 @@ export default function CreateQuiz({ navigation }) {
         });
 
         if (!result.cancelled) {
-            setImage(result.uri);
+            setQuizImgUri({ uri: result.uri });
         }
     }
 
     //function to handle when any quiz item is clicked on
-    function hanldeCreateBtnClick() {
-        console.log("create btn clicked");
-        navigation.navigate('QuizDetails');
+    async function hanldeCreateBtnClick() {
+        setIsLoading(true);
+
+        const createdByUserId = await AsyncStorage.getItem('loggedUserId');
+        if (createdByUserId) {
+            //if a quiz image is choosen
+            //then uploading it to firebase storage
+            if (quizImgUri) {
+                await uploadImageInFirebase(createdByUserId)
+                    .then(() => {
+                        displaySnackBar("success", "Image Successfully Uploaded");
+                    })
+                    .catch((error) => {
+                        setIsLoading(false);
+                        displaySnackBar("error", "Failed to upload Image");
+                    });
+            } else {
+                insertQuizInFirebase(createdByUserId, quizImgUri);
+            }
+
+        } else {
+            displaySnackBar("error", "User is not logged in");
+        }
+    }
+
+    //function to upload the image in firebase
+    async function uploadImageInFirebase(createdByUserId) {
+        const timeStamp = Math.floor(Date.now() / 1000);
+        const imageName = createdByUserId + "_" + timeStamp + ".jpg";
+
+        const response = await fetch(quizImgUri.uri);
+        const blob = await response.blob();
+
+        //putting image in firebase
+        const storageRef = firebase.app().storage().ref().child("quiz_image/" + imageName);
+        const resp = storageRef.put(blob);
+        resp
+            .on(
+                firebase.storage.TaskEvent.STATE_CHANGED,
+                snapshot => {
+                    const percent = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    console.log("percent", percent);
+                },
+                error => {
+                    console.log("image upload error: ", (error).toString());
+                },
+                () => {
+                    storageRef.getDownloadURL()
+                        .then((downloadUrl) => {
+                            setQuizImgUri({ uri: downloadUrl });
+
+                            //updating the uploaded image url in firebase db
+                            insertQuizInFirebase(createdByUserId, { uri: downloadUrl });
+                        })
+                }
+            )
+
+        return resp;
+    }
+
+    //function to insert quiz in firebase db
+    function insertQuizInFirebase(createdByUserId, imgUri) {
+        const quizesDbRef = firebase.app().database().ref('quizes/');
+        quizesDbRef
+            .push({
+                createdByUserId,
+                quizImgUri: imgUri,
+                quizName,
+                quizDesc,
+                quizType,
+            },
+                (error) => {
+                    if (error) {
+                        setIsLoading(false);
+                        displaySnackBar("error", "Failed to add quiz");
+                    } else {
+                        setIsLoading(false);
+                        displaySnackBar("success", "Quiz added");
+
+                        navigation.navigate('QuizDetails');
+                    }
+                });
     }
 
     //component rendering
@@ -97,7 +176,7 @@ export default function CreateQuiz({ navigation }) {
                     <ScrollView style={styles.container}>
                         <View style={styles.form}>
                             <Text style={styles.label}>Quiz Image</Text>
-                            <Image source={{ uri: image }} style={styles.image} />
+                            <Image source={quizImgUri} style={styles.image} />
                             <View style={styles.divider}></View>
                             <BasicButton
                                 text="Pick Image"
@@ -145,6 +224,7 @@ export default function CreateQuiz({ navigation }) {
                                 text="Create"
                                 onPress={hanldeCreateBtnClick}
                             />
+                            <View style={styles.divider}></View>
                         </View>
                     </ScrollView >
             }
