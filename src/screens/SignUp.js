@@ -80,7 +80,7 @@ export default class SignUp extends ValidationComponent {
 
                                             this.hideLoader();
                                             this.displaySnackBar("success", "Successfully Registered");
-                                            this.props.navigation.navigate('Dashboard');
+                                            this.props.navigation.push('Dashboard');
                                         } catch {
                                             this.hideLoader();
                                             this.displaySnackBar("error", "Something went wrong");

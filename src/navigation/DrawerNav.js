@@ -22,7 +22,6 @@ const theme = {
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props) {
-    // console.log("props", props);
     return (
         <DrawerContentScrollView {...props}>
             <DrawerItem

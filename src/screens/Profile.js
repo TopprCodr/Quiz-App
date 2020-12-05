@@ -62,13 +62,13 @@ export default function Profile() {
                         let correct = 0;
                         let incorrect = 0;
 
-                        const quizResponses = response.quizResponses;
+                        const quizResponses = response.quizResponses || {};
 
                         const tempGivenQuiz = Object.keys(quizResponses).length || null;
 
                         for (const quizId in quizResponses) {
                             const quizResponse = quizResponses[quizId];
-                            const responses = quizResponse.responses || [];
+                            const responses = quizResponse.responses || {};
 
                             console.log("responses", responses);
 
@@ -246,6 +246,7 @@ export default function Profile() {
                                 style={styles.inputField}
                                 placeholder="Enter your name"
                                 value={name}
+                                autoCapitalize={"words"}
                                 onChangeText={(val) => setName(val)}
                             />
                             <View style={styles.divider}></View>
