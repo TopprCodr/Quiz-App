@@ -159,7 +159,14 @@ export default function CreateQuiz({ navigation }) {
                         setIsLoading(false);
                         displaySnackBar("success", "Quiz added");
 
-                        navigation.navigate('QuizDetails');
+                        //redirecting to quiz details screen
+                        navigation.navigate('QuizDetails', {
+                            quizImgUri: imgUri,
+                            quizName,
+                            quizDesc,
+                            quizType,
+                            questions: [],
+                        });
                     }
                 });
     }

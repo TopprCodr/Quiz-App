@@ -73,7 +73,6 @@ export default function MyQuizes({ navigation }) {
 
     //fuction to hanlde when add new quiz btn is pressed on
     function handleAddNewQuizBtnClick() {
-        console.log("add new quuiz btn pressed");
         //redirecting to CreateQuiz.js
         navigation.navigate('CreateQuiz');
     }
