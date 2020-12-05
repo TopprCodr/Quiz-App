@@ -11,7 +11,7 @@ export default function GiveQuiz({ route: {
         quizId,
         quizImgUri,
         quizName,
-        questions,
+        questions = [],
     } = {},
 } = {},
     navigation,
