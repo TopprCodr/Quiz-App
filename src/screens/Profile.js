@@ -16,6 +16,7 @@ export default function Profile() {
     const [email, setEmail] = useState("");
     const [ageGroup, setAgeGroup] = useState("");
     const [desc, setDesc] = useState("");
+    const [givenQuizCount, setGivenQuizCount] = useState(null);
     const [performanceData, setPerformanceData] = useState({
         "total": 0,
         "correct": 0,
@@ -62,14 +63,19 @@ export default function Profile() {
                         let incorrect = 0;
 
                         const quizResponses = response.quizResponses;
-                        for (const idx in quizResponses) {
-                            const quizResponse = quizResponses[idx];
+
+                        const tempGivenQuiz = Object.keys(quizResponses).length || null;
+
+                        for (const quizId in quizResponses) {
+                            const quizResponse = quizResponses[quizId];
                             const responses = quizResponse.responses || [];
 
-                            const tempTotal = responses.length || 0;
+                            console.log("responses", responses);
+
+                            const tempTotal = Object.keys(responses).length || 0;
                             total += tempTotal;
-                            for (const responsesIdx in responses) {
-                                const ansResponse = responses[responsesIdx];
+                            for (const questionId in responses) {
+                                const ansResponse = responses[questionId];
                                 const isCorrect = ansResponse["isCorrect"];
                                 if (isCorrect) {
                                     correct++;
@@ -83,6 +89,7 @@ export default function Profile() {
                         setEmail(response.email);
                         setDesc(response.desc);
                         setAgeGroup(response.ageGroup);
+                        setGivenQuizCount(tempGivenQuiz);
                         setPerformanceData({
                             total,
                             correct,
@@ -279,7 +286,12 @@ export default function Profile() {
                         </View>
 
                         <Text style={styles.label}>Performance</Text>
-                        <Text style={styles.totalData}>Total attempted: {performanceData.total}</Text>
+                        {
+                            givenQuizCount ?
+                                <Text style={styles.totalData}>Total quiz attempted: {givenQuizCount}</Text>
+                                : null
+                        }
+                        <Text style={styles.totalData}>Total Questions attempted: {performanceData.total}</Text>
                         <View style={styles.chartContainer}>
                             <PieChart
                                 data={[
@@ -406,7 +418,7 @@ const styles = StyleSheet.create({
     totalData: {
         fontWeight: '500',
         fontSize: 15,
-        lineHeight: 20,
+        lineHeight: 17,
         color: '#757575',
         marginVertical: 10,
     },
