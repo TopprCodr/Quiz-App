@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import firebase from '../FirebaseConfig';
 
 import BasicButton from "../components/BasicButton";
 
 export default function GiveQuiz({ route: {
     params: {
+        quizId,
         quizImgUri,
         quizName,
         questions,
@@ -15,9 +19,9 @@ export default function GiveQuiz({ route: {
     const totalQstnsCount = Object.keys(questions).length || 0;
 
     const [quizQsnts, setQuizQsnts] = useState([]);
-
     const [activeQstnIdx, setActiveQstnIdx] = useState(0);
-    const [selectedOptionIdx, setSelectedOptionIdx] = useState(null);
+    const [qstnResponses, setQstnResponses] = useState({});
+    const [selectedQstnResponseOptionIdx, setSelectedQstnResponseOptionIdx] = useState(null);
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -30,6 +34,7 @@ export default function GiveQuiz({ route: {
                 let options = qstn.options;
                 options = shuffle(options);
                 qstn["options"] = options;
+                qstn["questionId"] = qstnId;
                 qstns.push(qstn);
             }
             setQuizQsnts(qstns);
@@ -38,9 +43,25 @@ export default function GiveQuiz({ route: {
     }, []);
 
     //function to handle when any option is clicked clicked on
-    function handleOptionPressed(idx) {
+    function handleOptionPressed(idx, option, question) {
         if (idx != null) {
-            setSelectedOptionIdx(idx);
+            //checking if that qstn is already answered
+            //if already answered then not selecteding the option
+            const questionId = question["questionId"];
+            if (!qstnResponses[questionId]) {
+                setSelectedQstnResponseOptionIdx(idx);
+
+                //storing response in state
+                let tempQstnResponses = qstnResponses;
+                tempQstnResponses[questionId] = {
+                    "questionId": questionId,
+                    "question": question.question,
+                    "answeredOptionId": option.optionId,
+                    "answeredOption": option.option,
+                    "isCorrect": option.isAns,
+                };
+                setQstnResponses(tempQstnResponses);
+            }
         }
     }
 
@@ -60,14 +81,23 @@ export default function GiveQuiz({ route: {
 
                     {
                         options.map((item, idx) => {
+                            const questionId = selectedQuestion["questionId"];
+                            let selectedOptionId = null;
+                            if (qstnResponses[questionId]) {
+                                const qstnResponse = qstnResponses[questionId];
+                                selectedOptionId = qstnResponse["answeredOptionId"];
+                            }
+
+                            //checking os selected ans is right/wrong
                             let optionImgSrc = require("../../assets/option.png");
                             let optionBorder = null;
 
                             const isAns = item.isAns;
-                            if (selectedOptionIdx == idx && isAns) {
+                            const optionId = item.optionId;
+                            if ((selectedOptionId == optionId || selectedQstnResponseOptionIdx == optionId) && isAns) {
                                 optionImgSrc = require("../../assets/rightOption.png");
                                 optionBorder = styles.rightAnsBorder;
-                            } else if (selectedOptionIdx == idx && !isAns) {
+                            } else if ((selectedOptionId == optionId || selectedQstnResponseOptionIdx == optionId) && !isAns) {
                                 optionImgSrc = require("../../assets/wrongOption.png");
                                 optionBorder = styles.wrongAnsBorder;
                             }
@@ -76,7 +106,7 @@ export default function GiveQuiz({ route: {
                                 <TouchableOpacity
                                     key={idx}
                                     style={[styles.option, optionBorder]}
-                                    onPress={() => handleOptionPressed(idx)}
+                                    onPress={() => handleOptionPressed(idx, item, selectedQuestion)}
                                 >
                                     <Text style={styles.optionText}>{item.option}</Text>
                                     <Image style={styles.optionImg} source={optionImgSrc} />
@@ -88,15 +118,6 @@ export default function GiveQuiz({ route: {
                     <View style={[styles.container, styles.btnsContainer]}>
                         {renderDirectionButtons()}
                     </View>
-
-                    <View style={styles.divider}></View>
-                    <BasicButton
-                        key={1}
-                        text="Submit"
-                        onPress={hanldeNextBtnClick}
-                    />
-                    <View style={styles.divider}></View>
-                    <View style={styles.divider}></View>
                 </ScrollView>
             )
         }
@@ -104,42 +125,66 @@ export default function GiveQuiz({ route: {
 
     //function to render direction buttons
     function renderDirectionButtons() {
-        let html = [];
+        let isPrevBtnActive = activeQstnIdx > 0;
+        let isNextBtnActive = activeQstnIdx < totalQstnsCount - 1;
+        return (
+            <>
+                <BasicButton
+                    key={0}
+                    text="Prev"
+                    customStyle={isPrevBtnActive ? styles.button : styles.disabledButton}
+                    onPress={isPrevBtnActive ? hanldePrevBtnClick : null}
+                />
+                <BasicButton
+                    key={1}
+                    text="Next"
+                    customStyle={isNextBtnActive ? styles.button : styles.disabledButton}
+                    onPress={isNextBtnActive ? hanldeNextBtnClick : null}
+                />
+            </>
+        )
+    }
 
-        //prev btn
-        if (activeQstnIdx > 0) {
-            html.push(<BasicButton
-                key={0}
-                text="Prev"
-                customStyle={styles.button}
-                onPress={hanldePrevBtnClick}
-            />)
+    //function to handle when submit btn is pressed on
+    async function handleSubmitBtnClick() {
+        const loggedUserId = await AsyncStorage.getItem('loggedUserId');
+        if (loggedUserId && quizId) {
+            setIsLoading(true);
+
+            // adding responses for that quiz in firebase db
+            const usersDbRef = firebase.app().database().ref('users/');
+            usersDbRef
+                .child(loggedUserId + "/quizResponses/" + quizId)
+                .set({
+                    "quizId": quizId,
+                    "responses": qstnResponses
+                },
+                    (error) => {
+                        if (error) {
+                            setIsLoading(false);
+
+                            navigation.goBack();
+                        } else {
+                            setIsLoading(false);
+
+                            navigation.goBack();
+                        }
+                    });
+
         }
-
-        //next btn
-        if (activeQstnIdx < totalQstnsCount - 1) {
-            html.push(<BasicButton
-                key={1}
-                text="Next"
-                customStyle={styles.button}
-                onPress={hanldeNextBtnClick}
-            />)
-        }
-
-        return html;
     }
 
     //function to handle next/prev btn click
     function hanldePrevBtnClick() {
         if (activeQstnIdx > 0) {
-            setSelectedOptionIdx(null);
+            setSelectedQstnResponseOptionIdx(null);
             setActiveQstnIdx(activeQstnIdx - 1);
         }
     }
 
     function hanldeNextBtnClick() {
         if (activeQstnIdx < totalQstnsCount - 1) {
-            setSelectedOptionIdx(null);
+            setSelectedQstnResponseOptionIdx(null);
             setActiveQstnIdx(activeQstnIdx + 1);
         }
     }
@@ -173,7 +218,14 @@ export default function GiveQuiz({ route: {
                     :
                     <>
                         <View style={styles.container}>
-                            <Text style={styles.title}>{quizName}</Text>
+                            <View style={styles.row}>
+                                <Text style={styles.title}>{quizName}</Text>
+                                <BasicButton
+                                    key={1}
+                                    text="Submit"
+                                    onPress={handleSubmitBtnClick}
+                                />
+                            </View>
                             <View style={styles.divider}></View>
                         </View>
 
@@ -197,6 +249,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
     },
 
+    row: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+
     title: {
         fontWeight: '500',
         fontSize: 20,
@@ -210,7 +268,7 @@ const styles = StyleSheet.create({
 
     image: {
         position: 'absolute',
-        top: 40,
+        top: 60,
         left: 0,
         right: 0,
         alignSelf: "center",
@@ -288,10 +346,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         marginVertical: 20,
-        // paddingBottom: 100,
     },
 
     button: {
         width: "43%",
+    },
+
+    disabledButton: {
+        width: "43%",
+        backgroundColor: "grey",
     }
 });

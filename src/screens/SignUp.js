@@ -67,9 +67,6 @@ export default class SignUp extends ValidationComponent {
                                 ageGroup,
                                 profilePicUri: "",
                                 desc: "",
-                                createdQuizIds: [""],
-                                givenQuizIds: [""],
-                                responses: [""],
                             },
                                 async (error) => {
                                     if (error) {

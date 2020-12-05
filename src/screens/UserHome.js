@@ -33,11 +33,12 @@ export default function UserHome({ navigation }) {
                     if (quizes) {
                         //sorting out quizes of that user
                         let quizzes = [];
-                        for (const key in quizes) {
-                            const quiz = quizes[key];
+                        for (const quizId in quizes) {
+                            const quiz = quizes[quizId];
                             const createdByUserId = quiz.createdByUserId;
 
                             if (createdByUserId !== loggedUserId) {
+                                quiz["quizId"] = quizId;
                                 quizzes.push(quiz);
                             }
                         }
@@ -68,8 +69,6 @@ export default function UserHome({ navigation }) {
 
     //function to handle when any quiz item is clicked on
     function handleQuizItemClick(index) {
-        console.log("give quiz", index);
-
         // redirecting to GiveQuiz.js
         navigation.navigate('GiveQuiz', quiz[index]);
     }

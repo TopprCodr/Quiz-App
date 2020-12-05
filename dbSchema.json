@@ -6,19 +6,18 @@
             "ageGroup": "1-5",
             "desc": "i am a aboy",
             "email": "adity@mn.in",
-            "password": "^&TRE%$W^URTYFHGDRTU^%E&$%*&^IYUY",
             "profilePicUri": {
                 "uri":  "http://gogoe.omc/adjhajkda.jpg"
             },
-            "createdQuizIds": ["3242rewtgdfb", "43rewtgfdh"],
-            "givenQuizIds": ["3242rewtgdfb"],
             "quizResponses": [
                 {
                     "quizId": "3242rewtgdfb",
                     "responses": [
                         {
                             "questionId": "jihugyftughiugyu",
+                            "question": "question.question",
                             "answeredOptionId": "7t6rfuyghkg765tfuyig",
+                            "answeredOption": "option.option",
                             "isCorrect": false
                         }
                     ]
@@ -36,7 +35,9 @@
             "quizId": "3242rewtgdfb",
             "createdByUserId": "y7tgyvgi7f7dtyufioiygifytuhio8",
             "quizName": "tell me about urself?",
-            "quizImgUri": "http://admnabjhsgjdkhsfkl;sadsjfhj.jpg",
+            "quizImgUri":{
+                "uri":  "http://gogoe.omc/adjhajkda.jpg"
+            },
             "quizType": "Maths Quiz",
             "quizDesc": "this is a mast quiz",
             "questions": [
