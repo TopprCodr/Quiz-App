@@ -1,56 +1,128 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, Image, ActivityIndicator } from 'react-native';
 
+import firebase from '../FirebaseConfig';
+
+import SnackBar from "../components/SnackBar";
 import BasicButton from "../components/BasicButton";
 
 export default function QuizDetails({
     route: {
         params: {
+            insertKey,
             quizImgUri,
             quizName,
             quizDesc,
             quizType,
-            questions,
         } = {},
     } = {},
     navigation,
 }) {
+    const [questions, setQuestions] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [snackBarVisible, setSnackBarVisible] = useState(false);
+    const [snackBarText, setSnackBarText] = useState("");
+    const [snackBarType, setSnackBarType] = useState("");
+
+    //component did mount
+    useEffect(() => {
+        //fetching available quiz types from db
+        fetchQuizQuestions();
+    }, []);
+
+    //function to fetch questions of the quiz
+    function fetchQuizQuestions() {
+        if (insertKey) {
+            const quizDbRef = firebase.app().database().ref('quizes/');
+            quizDbRef
+                .child(insertKey + "/questions")
+                .on('value',
+                    function(snap) {
+                        const questions = snap.val();
+                        if (questions) {
+                            let quizQuestions = [];
+                            for (const key in questions) {
+                                const question = questions[key];
+                                const questionTitle = question.question;
+
+                                quizQuestions.push(questionTitle);
+                            }
+                            setQuestions(quizQuestions);
+                        }
+                        setIsLoading(false);
+                    },
+                    error => {
+                        displaySnackBar("error", "Failed to get quiz questions");
+                    });
+        }
+    }
+
+    //function to display snackbar
+    function displaySnackBar(type, text) {
+        setSnackBarType(type);
+        setSnackBarText(text);
+        setSnackBarVisible(true);
+    }
+
+    //function to hide snackbar
+    function hideSnackBar() {
+        setSnackBarVisible(false);
+    }
+
     //function to handle when any quiz item is clicked on
     function hanldeAddQstnBtnClick() {
-        console.log("add qstn btn clicked");
-        navigation.navigate('Add Question');
+        navigation.navigate('Add Question', {
+            quizId: insertKey
+        });
     }
 
     //component rendering
     return (
-        <ScrollView style={styles.container}>
-            <Text style={styles.title}>{quizName}</Text>
-            <Text style={styles.subtitle2}>{quizType}</Text>
+        <>
+            <ScrollView style={styles.container}>
+                <Text style={styles.title}>{quizName}</Text>
+                <Text style={styles.subtitle2}>{quizType}</Text>
 
-            <Image source={quizImgUri || require("../../assets/quiz.jpg")} style={styles.image} />
-            <View style={styles.divider}></View>
+                <Image source={quizImgUri || require("../../assets/quiz.jpg")} style={styles.image} />
+                <View style={styles.divider}></View>
 
-            <Text style={styles.subtitle}>{quizDesc}</Text>
-            <View style={styles.divider}></View>
+                <Text style={styles.subtitle}>{quizDesc}</Text>
+                <View style={styles.divider}></View>
 
-            <View style={styles.qstnContainer}>
-                {
-                    questions.map((item, idx) => {
-                        return (
-                            <View style={styles.qstn} key={idx}>
-                                <Text style={styles.qstnText}>{idx + 1 + ". " + item.title}</Text>
-                            </View>
-                        )
-                    })
-                }
-            </View>
-            <View style={styles.divider}></View>
+                <View style={styles.qstnContainer}>
+                    {
+                        isLoading ?
+                            <ActivityIndicator style={styles.loader} />
+                            :
+                            questions.map((item, idx) => {
+                                return (
+                                    <View style={styles.qstn} key={idx}>
+                                        <Text style={styles.qstnText}>{idx + 1 + ". " + item}</Text>
+                                    </View>
+                                )
+                            })
+                    }
+                </View>
+                <View style={styles.divider}></View>
 
-            <BasicButton
-                text="Add Question"
-                onPress={hanldeAddQstnBtnClick}
-            />
-        </ScrollView >
+                <BasicButton
+                    text="Add Question"
+                    onPress={hanldeAddQstnBtnClick}
+                />
+            </ScrollView >
+
+            {
+                snackBarVisible ?
+                    <SnackBar
+                        isVisible={snackBarVisible}
+                        text={snackBarText}
+                        type={snackBarType}
+                        onClose={hideSnackBar}
+                    />
+                    : null
+            }
+        </>
     );
 }
 
@@ -63,7 +135,7 @@ const styles = StyleSheet.create({
     },
 
     title: {
-        fontWeight: '500',
+        fontWeight: '600',
         fontSize: 20,
         letterSpacing: 0.1,
         color: '#2E2E2E',

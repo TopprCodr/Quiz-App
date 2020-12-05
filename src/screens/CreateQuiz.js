@@ -142,9 +142,13 @@ export default function CreateQuiz({ navigation }) {
 
     //function to insert quiz in firebase db
     function insertQuizInFirebase(createdByUserId, imgUri) {
+        const timeStamp = Math.floor(Date.now() / 1000);
+        const insertKey = createdByUserId + "_" + timeStamp;
+
         const quizesDbRef = firebase.app().database().ref('quizes/');
         quizesDbRef
-            .push({
+            .child(insertKey)
+            .set({
                 createdByUserId,
                 quizImgUri: imgUri,
                 quizName,
@@ -161,11 +165,11 @@ export default function CreateQuiz({ navigation }) {
 
                         //redirecting to quiz details screen
                         navigation.navigate('QuizDetails', {
+                            insertKey,
                             quizImgUri: imgUri,
                             quizName,
                             quizDesc,
                             quizType,
-                            questions: [],
                         });
                     }
                 });
@@ -196,6 +200,8 @@ export default function CreateQuiz({ navigation }) {
                                 style={styles.inputField}
                                 placeholder="Give a name to your quiz"
                                 value={quizName}
+                                autoCapitalize="words"
+                                autoFocus={true}
                                 onChangeText={(val) => setQuizName(val)}
                             />
                             <View style={styles.divider}></View>

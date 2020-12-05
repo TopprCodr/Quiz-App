@@ -43,8 +43,8 @@ export default function MyQuizes({ navigation }) {
                         }
                         myQuizes.reverse();
                         setMyQuizzes(myQuizes);
-                        setIsLoading(false);
                     }
+                    setIsLoading(false);
                 })
                 .catch(error => {
                     displaySnackBar("error", "Failed to get user's quizes");
