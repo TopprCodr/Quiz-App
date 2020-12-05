@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, Image, Platform } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, Image, ActivityIndicator, Platform } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import firebase from '../FirebaseConfig';
+
+import SnackBar from "../components/SnackBar";
 import BasicButton from "../components/BasicButton";
 
 export default function CreateQuiz({ navigation }) {
-    const [availableQuizTypes, setAvailableQuizTypes] = useState(["Maths Quiz", "Science Quiz", "History Quiz", "Social Science", "Hindi Quiz", "English Quiz", "Sports Quiz", "Tech Quiz", "Arts Quiz", "General Quiz"]); //will be fetched from db
+    const [availableQuizTypes, setAvailableQuizTypes] = useState([]);
 
     const [image, setImage] = useState(null);
     const [quizName, setQuizName] = useState("");
     const [quizDesc, setQuizDesc] = useState("");
     const [quizType, setQuizType] = useState("");
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [snackBarVisible, setSnackBarVisible] = useState(false);
+    const [snackBarText, setSnackBarText] = useState("");
+    const [snackBarType, setSnackBarType] = useState("");
 
     //component did mount
     useEffect(() => {
@@ -24,7 +33,39 @@ export default function CreateQuiz({ navigation }) {
                 }
             }
         })();
+
+        //fetching available quiz types from db
+        fetchAvailableQuizTypes();
     }, []);
+
+    //function yo fetch available quiz types from firebase db
+    function fetchAvailableQuizTypes() {
+        const quizTypesDbRef = firebase.app().database().ref('quizTypes/');
+        quizTypesDbRef
+            .once('value')
+            .then(resp => {
+                const quizTypes = resp.val();
+                if (quizTypes) {
+                    setAvailableQuizTypes(quizTypes);
+                    setIsLoading(false);
+                }
+            })
+            .catch(error => {
+                displaySnackBar("error", "Failed to get user's quizes");
+            });
+    }
+
+    //function to display snackbar
+    function displaySnackBar(type, text) {
+        setSnackBarType(type);
+        setSnackBarText(text);
+        setSnackBarVisible(true);
+    }
+
+    //function to hide snackbar
+    function hideSnackBar() {
+        setSnackBarVisible(false);
+    }
 
     //function to handle when Pick Image btn is clicked on
     async function handlePickImgBtnClick() {
@@ -46,61 +87,79 @@ export default function CreateQuiz({ navigation }) {
 
     //component rendering
     return (
-        <ScrollView style={styles.container}>
-            <Text style={styles.title}>Create Quiz</Text>
+        <>
+            {
+                isLoading ?
+                    <View style={styles.loaderContainer}>
+                        <ActivityIndicator style={styles.loader} />
+                    </View>
+                    :
+                    <ScrollView style={styles.container}>
+                        <View style={styles.form}>
+                            <Text style={styles.label}>Quiz Image</Text>
+                            <Image source={{ uri: image }} style={styles.image} />
+                            <View style={styles.divider}></View>
+                            <BasicButton
+                                text="Pick Image"
+                                onPress={handlePickImgBtnClick}
+                            />
+                            <View style={styles.divider}></View>
 
-            <View style={styles.form}>
-                <Text style={styles.label}>Quiz Image</Text>
-                <Image source={{ uri: image }} style={styles.image} />
-                <View style={styles.divider}></View>
-                <BasicButton
-                    text="Pick Image"
-                    onPress={handlePickImgBtnClick}
-                />
-                <View style={styles.divider}></View>
+                            <Text style={styles.label}>Quiz Name</Text>
+                            <TextInput
+                                style={styles.inputField}
+                                placeholder="Give a name to your quiz"
+                                value={quizName}
+                                onChangeText={(val) => setQuizName(val)}
+                            />
+                            <View style={styles.divider}></View>
 
-                <Text style={styles.label}>Quiz Name</Text>
-                <TextInput
-                    style={styles.inputField}
-                    placeholder="Give a name to your quiz"
-                    value={quizName}
-                    onChangeText={(val) => setQuizName(val)}
-                />
-                <View style={styles.divider}></View>
+                            <Text style={styles.label}>Quiz Type</Text>
+                            <Picker
+                                style={styles.inputField}
+                                selectedValue={quizType}
+                                onValueChange={(quizType, itemIndex) => setQuizType(quizType)}
+                            >
+                                <Picker.Item label="" value="" />
+                                {
+                                    availableQuizTypes.map((item, idx) => {
+                                        return (
+                                            <Picker.Item key={idx} label={item} value={item} />
+                                        )
+                                    })
+                                }
+                            </Picker>
+                            <View style={styles.divider}></View>
 
-                <Text style={styles.label}>Quiz Type</Text>
-                <Picker
-                    style={styles.inputField}
-                    selectedValue={quizType}
-                    onValueChange={(quizType, itemIndex) => setQuizType(quizType)}
-                >
-                    <Picker.Item label="" value="" />
-                    {
-                        availableQuizTypes.map((item, idx) => {
-                            return (
-                                <Picker.Item key={idx} label={item} value={item} />
-                            )
-                        })
-                    }
-                </Picker>
-                <View style={styles.divider}></View>
+                            <Text style={styles.label}>Description</Text>
+                            <TextInput
+                                style={styles.inputField}
+                                multiline
+                                placeholder="What describes your Quiz?"
+                                value={quizDesc}
+                                onChangeText={(val) => setQuizDesc(val)}
+                            />
+                            <View style={styles.divider}></View>
 
-                <Text style={styles.label}>Description</Text>
-                <TextInput
-                    style={styles.inputField}
-                    multiline
-                    placeholder="What describes your Quiz?"
-                    value={quizDesc}
-                    onChangeText={(val) => setQuizDesc(val)}
-                />
-                <View style={styles.divider}></View>
+                            <BasicButton
+                                text="Create"
+                                onPress={hanldeCreateBtnClick}
+                            />
+                        </View>
+                    </ScrollView >
+            }
 
-                <BasicButton
-                    text="Create"
-                    onPress={hanldeCreateBtnClick}
-                />
-            </View>
-        </ScrollView >
+            {
+                snackBarVisible ?
+                    <SnackBar
+                        isVisible={snackBarVisible}
+                        text={snackBarText}
+                        type={snackBarType}
+                        onClose={hideSnackBar}
+                    />
+                    : null
+            }
+        </>
     );
 }
 
@@ -123,10 +182,6 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
     },
 
-    form: {
-        marginTop: 35,
-    },
-
     label: {
         fontSize: 16,
         lineHeight: 18,
@@ -146,5 +201,12 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 200,
         backgroundColor: "#f1f1f1",
+    },
+
+    loaderContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+        paddingHorizontal: 30,
+        justifyContent: "center",
     },
 });

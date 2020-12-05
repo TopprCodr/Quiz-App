@@ -16,7 +16,7 @@ export default function QuizItem({
         <TouchableOpacity style={[styles.box, customStyle]} onPress={handleOnPress}>
             {
                 imageUrl ?
-                    <Image source={{ uri: imageUrl }} style={styles.image} />
+                    <Image source={imageUrl} style={styles.image} />
                     : <Image source={require("../../assets/quiz.jpg")} style={styles.image} />
             }
 

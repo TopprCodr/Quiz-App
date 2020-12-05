@@ -5,25 +5,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import firebase from '../FirebaseConfig';
 
 import QuizItem from "../components/QuizItem";
+import SnackBar from "../components/SnackBar";
 
 export default function MyQuizes({ navigation }) {
-    const [quiz, setQuiz] = useState([{
-        "quiz_name": "Algebra Quiz",
-        "quiz_img_uri": "https://squeakychimp.com/wp-content/uploads/2016/11/math-algebra-legging-texture.jpg",
-    },
-    {
-        "quiz_name": "McLaren Quiz",
-        "quiz_img_uri": "",
-    },
-    {
-        "quiz_name": "Cricket Quiz",
-        "quiz_img_uri": "https://wp-seo-mainpage.s3-accelerate.amazonaws.com/uploads/cricket-players.jpg",
-    },
-    {
-        "quiz_name": "Advance Algorithm Quiz",
-        "quiz_img_uri": "https://www.geeksforgeeks.org/wp-content/uploads/Competitive-Programming-1.jpg",
-    },
-    ]); //will be fetched from db
+    const [myQuizzes, setMyQuizzes] = useState([]);
 
     const [isLoading, setIsLoading] = useState(true);
     const [snackBarVisible, setSnackBarVisible] = useState(false);
@@ -32,7 +17,7 @@ export default function MyQuizes({ navigation }) {
 
     //component did mount
     useEffect(() => {
-        //getting users data from firebase
+        //getting users quizes from firebase db
         fetchUsersQuizes();
     }, []);
 
@@ -40,18 +25,28 @@ export default function MyQuizes({ navigation }) {
     async function fetchUsersQuizes() {
         const loggedUserId = await AsyncStorage.getItem('loggedUserId');
         if (loggedUserId) {
-            const usersDbRef = firebase.app().database().ref('users/');
-            usersDbRef
-                .child(loggedUserId)
+            const quizesDbRef = firebase.app().database().ref('quizes/');
+            quizesDbRef
                 .once('value')
                 .then(resp => {
-                    const response = resp.val();
-                    if (response) {
+                    const quizes = resp.val();
+                    if (quizes) {
+                        //sorting out quizes of that user
+                        let myQuizes = [];
+                        for (const key in quizes) {
+                            const quiz = quizes[key];
+                            const createdByUserId = quiz.createdByUserId;
+
+                            if (createdByUserId === loggedUserId) {
+                                myQuizes.push(quiz);
+                            }
+                        }
+                        setMyQuizzes(myQuizes);
                         setIsLoading(false);
                     }
                 })
                 .catch(error => {
-                    displaySnackBar("error", "Failed to fetch profile");
+                    displaySnackBar("error", "Failed to get user's quizes");
                 });
         } else {
             displaySnackBar("error", "User is not logged in");
@@ -93,13 +88,13 @@ export default function MyQuizes({ navigation }) {
                     :
                     <ScrollView style={styles.container}>
                         {
-                            quiz.map((item, idx) => {
+                            myQuizzes.map((item, idx) => {
                                 return (
                                     <QuizItem
                                         key={idx}
                                         index={idx}
-                                        name={item.quiz_name}
-                                        imageUrl={item.quiz_img_uri}
+                                        name={item.quizName}
+                                        imageUrl={item.quizImgUri}
                                         onPress={handleQuizItemClick}
                                     />
                                 )
