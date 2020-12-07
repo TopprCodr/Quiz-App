@@ -99,9 +99,8 @@ export default function Profile() {
                         if (response.profilePicUri) {
                             setProfilePicUri(response.profilePicUri)
                         }
-
-                        setIsLoading(false);
                     }
+                    setIsLoading(false);
                 })
                 .catch(error => {
                     displaySnackBar("error", "Failed to fetch profile");

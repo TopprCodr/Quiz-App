@@ -21,7 +21,7 @@ export default function UserHome({ navigation }) {
         fetchUsersQuizes();
     }, []);
 
-    //function to fetch quizes of the user
+    //function to fetch quizes of all users
     async function fetchUsersQuizes() {
         const loggedUserId = await AsyncStorage.getItem('loggedUserId');
         if (loggedUserId) {
@@ -31,7 +31,6 @@ export default function UserHome({ navigation }) {
                 .then(resp => {
                     const quizes = resp.val();
                     if (quizes) {
-                        //sorting out quizes of that user
                         let quizzes = [];
                         for (const quizId in quizes) {
                             const quiz = quizes[quizId];
@@ -42,13 +41,13 @@ export default function UserHome({ navigation }) {
                                 quizzes.push(quiz);
                             }
                         }
-                        quizzes.reverse();
+                        quizzes.reverse(); //reversing the quizzes to get the lastest quiz on top
                         setQuiz(quizzes);
                     }
                     setIsLoading(false);
                 })
                 .catch(error => {
-                    displaySnackBar("error", "Failed to get user's quizes");
+                    displaySnackBar("error", "Failed to get quizes");
                 });
         } else {
             displaySnackBar("error", "User is not logged in");

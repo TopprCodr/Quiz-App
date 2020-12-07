@@ -36,6 +36,7 @@ function CustomDrawerContent(props) {
 
             <DrawerItem
                 label="Sign Out"
+                labelStyle={{color: "red"}}
                 onPress={() => hanldeLogoutPress(props)}
             />
         </DrawerContentScrollView>

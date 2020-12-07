@@ -41,7 +41,7 @@ export default function MyQuizes({ navigation }) {
                                 myQuizes.push(quiz);
                             }
                         }
-                        myQuizes.reverse();
+                        myQuizes.reverse(); //reversing the quizzes to get the lastest quiz on top
                         setMyQuizzes(myQuizes);
                     }
                     setIsLoading(false);

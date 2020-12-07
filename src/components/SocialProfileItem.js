@@ -20,7 +20,7 @@ export default function SocialProfileItem({
     return (
         <TouchableOpacity style={[styles.card, customStyle]} onPress={handleOnPress}>
             <View style={styles.container}>
-                <Image source={{ uri: profilePicUri }} style={styles.img} />
+                <Image source={profilePicUri || require("../../assets/profile.png")} style={styles.img} />
                 <View>
                     <Text style={styles.name}>{name}</Text>
                     <Text style={styles.email}>{email}</Text>
@@ -38,6 +38,7 @@ export default function SocialProfileItem({
                                 customStyle={styles.quizBtn}
                                 textStyle={styles.btnText}
                                 text={item.quizName}
+                            // onPress={ }
                             />
                         )
                     })
@@ -93,10 +94,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
+        flexWrap: "wrap",
     },
 
     quizBtn: {
-        marginHorizontal: 4,
+        margin: 4,
     },
 
     btnText: {
