@@ -260,6 +260,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
         letterSpacing: 0.1,
         color: '#2E2E2E',
+        flex: 1,
+        flexWrap: "wrap",
     },
 
     divider: {

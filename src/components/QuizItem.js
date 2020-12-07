@@ -39,6 +39,8 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         fontSize: 18,
         marginLeft: 16,
+        flex: 1,
+        flexWrap: "wrap",
     },
 
     image: {

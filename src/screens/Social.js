@@ -7,7 +7,7 @@ import firebase from '../FirebaseConfig';
 import SocialProfileItem from "../components/SocialProfileItem";
 import SnackBar from "../components/SnackBar";
 
-export default function Social() {
+export default function Social({ navigation }) {
     const [usersQuizes, setUsersQuizes] = useState({});
     const [users, setUsers] = useState([]);
 
@@ -124,6 +124,7 @@ export default function Social() {
                                     email={item.email}
                                     desc={item.desc}
                                     quizes={usersQuizes[item.userId]}
+                                    navigation={navigation}
                                     onPress={handleProfileClick}
                                 />
                             )

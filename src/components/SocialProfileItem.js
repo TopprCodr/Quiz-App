@@ -11,12 +11,19 @@ export default function SocialProfileItem({
     email,
     desc,
     quizes = [],
+    navigation,
     onPress,
 }) {
     function handleOnPress() {
         onPress(index);
     }
 
+    function handleQuizItemClick(idx) {
+        // redirecting to GiveQuiz.js
+        navigation.navigate('GiveQuiz', quizes[idx]);
+    }
+
+    //component rendering
     return (
         <TouchableOpacity style={[styles.card, customStyle]} onPress={handleOnPress}>
             <View style={styles.container}>
@@ -38,7 +45,7 @@ export default function SocialProfileItem({
                                 customStyle={styles.quizBtn}
                                 textStyle={styles.btnText}
                                 text={item.quizName}
-                            // onPress={ }
+                                onPress={() => handleQuizItemClick(idx)}
                             />
                         )
                     })
