@@ -30,8 +30,8 @@ function CustomDrawerContent(props) {
             />
 
             <DrawerItem
-                label="About"
-                onPress={() => props.navigation.navigate("About")}
+                label="Social"
+                onPress={() => props.navigation.navigate("Social")}
             />
 
             <DrawerItem

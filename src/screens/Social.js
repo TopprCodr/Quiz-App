@@ -47,8 +47,6 @@ export default function Social() {
     //component rendering
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Social</Text>
-
             {
                 users.map(function(item, idx) {
                     return (
@@ -73,7 +71,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        marginTop: 60,
+        paddingTop: 10,
         paddingHorizontal: 30,
     },
 

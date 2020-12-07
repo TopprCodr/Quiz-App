@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login from "../screens/Login";
 import SignUp from "../screens/SignUp";
 import Landing from "../screens/Landing";
-import AboutPage from '../screens/AboutPage';
+import Social from '../screens/Social';
 
 import DrawerNav from '../navigation/DrawerNav';
 
@@ -15,7 +15,7 @@ export default function RootStack() {
             <Stack.Screen name="Landing" component={Landing} options={{ headerShown: false, }} />
             <Stack.Screen name="Signup" component={SignUp} />
             <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="About" component={AboutPage} />
+            <Stack.Screen name="Social" component={Social} />
 
             <Stack.Screen name="Dashboard" component={DrawerNav} options={{ headerShown: false }} />
         </Stack.Navigator>
