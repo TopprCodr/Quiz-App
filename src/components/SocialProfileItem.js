@@ -18,6 +18,7 @@ export default function SocialProfileItem({
         onPress(index);
     }
 
+    // function to handle when any quiz btn is clicked on
     function handleQuizItemClick(idx) {
         // redirecting to GiveQuiz.js
         navigation.navigate('GiveQuiz', quizes[idx]);
