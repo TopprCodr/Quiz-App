@@ -4,6 +4,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import BasicButton from "../components/BasicButton";
 
+import { AnimatedSVGPath } from "react-native-svg-animations";
+import d from '../components/d';
+
 export default function Landing({ navigation }) {
     const [isLoading, setIsLoading] = useState(true);
 
@@ -47,6 +50,18 @@ export default function Landing({ navigation }) {
                     <ActivityIndicator style={styles.loader} />
                     :
                     <>
+                        <View style={{ margin: 10 }}>
+                            <AnimatedSVGPath
+                            strokeColor={"pink"}
+                            duration={2500}
+                            strokeWidth={5}
+                            height={400}
+                            width={400}
+                            scale={0.5}
+                            delay={500}
+                            d={d}
+                            />
+                        </View>
                         <Text style={styles.title}>Quizmania</Text>
                         <View style={styles.divider}></View>
                         <BasicButton
