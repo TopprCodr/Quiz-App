@@ -4,8 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import BasicButton from "../components/BasicButton";
 
-import { AnimatedSVGPath } from "react-native-svg-animations";
-import d from '../components/d';
+import LottieView from 'lottie-react-native';
+
 
 export default function Landing({ navigation }) {
     const [isLoading, setIsLoading] = useState(true);
@@ -22,6 +22,9 @@ export default function Landing({ navigation }) {
             } else {
                 setIsLoading(false);
             }
+
+            this.animation.reset();
+            this.animation.play();
         })();
 
         //to prevent going back
@@ -50,16 +53,19 @@ export default function Landing({ navigation }) {
                     <ActivityIndicator style={styles.loader} />
                     :
                     <>
-                        <View style={{ margin: 10 }}>
-                            <AnimatedSVGPath
-                            strokeColor={"pink"}
-                            duration={2500}
-                            strokeWidth={5}
-                            height={400}
-                            width={400}
-                            scale={0.5}
-                            delay={500}
-                            d={d}
+                        <View style={styles.animationContainer}>
+                            <LottieView
+                            ref={animation => {
+                                this.animation = animation;
+                            }}
+                            style={{
+                                width: 400,
+                                height: 400,
+                                backgroundColor: 'white',
+                            }}
+                            source={require('../../assets/logo.json')}
+                            // OR find more Lottie files @ https://lottiefiles.com/featured
+                            // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
                             />
                         </View>
                         <Text style={styles.title}>Quizmania</Text>
@@ -88,12 +94,12 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
 
-    animation: {
-        width: "100%",
-        backgroundColor: "#f1f1f1",
-        marginBottom: 50,
-    },
+    animationContainer: {
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
 
+      },
     title: {
         fontWeight: '500',
         fontSize: 30,
