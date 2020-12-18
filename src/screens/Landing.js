@@ -63,7 +63,7 @@ export default function Landing({ navigation }) {
                                 height: 400,
                                 backgroundColor: 'white',
                             }}
-                            source={require('../../assets/logo.json')}
+                            source={require('../../assets/logo3.json')}
                             // OR find more Lottie files @ https://lottiefiles.com/featured
                             // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
                             />
