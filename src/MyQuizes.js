@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
-
-import QuizItem from "./QuizItem";
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } 
+from 'react-native';
 
 export default function MyQuizes() {
     const [quiz, setQuiz] = useState([{
@@ -20,7 +19,7 @@ export default function MyQuizes() {
         "quiz_name": "Advance Algorithm Quiz",
         "quiz_img_uri": "https://www.geeksforgeeks.org/wp-content/uploads/Competitive-Programming-1.jpg",
     },
-    ]); //will be fetched from db
+    ]); 
 
     //function to handle when any quiz item is clicked on
     function handleQuizItemClick(index) {
@@ -29,7 +28,7 @@ export default function MyQuizes() {
 
     //fuction to hanlde when add new quiz btn is pressed on
     function handleAddNewQuizBtnClick() {
-        console.log("add new quuiz btn pressed");
+        console.log("add new quiz btn pressed");
         //redirecting to CreateQuiz.js
     }
 
@@ -38,21 +37,6 @@ export default function MyQuizes() {
         <ScrollView style={styles.container}>
             <Text style={styles.title}>My Quizzes</Text>
             <View style={styles.divider}></View>
-
-            {
-                quiz.map((item, idx) => {
-                    return (
-                        <QuizItem
-                            key={idx}
-                            index={idx}
-                            name={item.quiz_name}
-                            imageUrl={item.quiz_img_uri}
-                            onPress={handleQuizItemClick}
-                        />
-                    )
-                })
-            }
-
             <TouchableOpacity style={styles.addNewBtn} onPress={handleAddNewQuizBtnClick}>
                 <Text style={styles.addNewBtnText}>+ Add new quiz</Text>
             </TouchableOpacity>
